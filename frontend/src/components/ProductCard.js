@@ -9,26 +9,32 @@ import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Rating from '@mui/material/Rating';
 
-import reptileImg from '../assets/img/contemplative-reptile.jpg';
+import { Link } from "react-router-dom";
 
 const ProductCard = (props) => {
+    const { product } = props;
+
     return (
         <Grid item xs={12} sm={4} md={4}>
             <Card>
-                <CardMedia
-                    component="img"
-                    alt="green iguana"
-                    height="140"
-                    image={reptileImg}
-                />
+                <Link to={`/products/${product.slug}`}>
+                    <CardMedia
+                        component="img"
+                        alt={product.get_featured_image.alt_text}
+                        height="140"
+                        image={`http://127.0.0.1:8000${product.get_featured_image.image}`}
+                    />
+                </Link>
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        Lizard
-                    </Typography>
+                    <Link to={`/products/${product.slug}`} className="link">
+                        <Typography gutterBottom variant="h5" component="div">
+                            {product.title}
+                        </Typography>
+                    </Link>
                     <Rating name="read-only" value={4} readOnly />
                 </CardContent>
                 <CardActions sx={{ p: 2, display: "flex", justifyContent: "space-between" }}>
-                    <Typography color="text.secondary" variant="body1">$108.99</Typography>
+                    <Typography color="text.secondary" variant="body1">${product.regular_price}</Typography>
                     <Button variant="outlined" color="secondary" size="small">Add to cart</Button>
                 </CardActions>
             </Card>

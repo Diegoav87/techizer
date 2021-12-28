@@ -3,6 +3,7 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
+import ProductDetail from './pages/ProductDetail';
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -33,6 +34,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Routes>
           <Route exact path="/" element={<Home />} />
+          <Route exact path="/products/:slug" element={<ProductDetail />} />
         </Routes>
       </ThemeProvider>
     </div>

@@ -19,8 +19,11 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const pages = ['Home', 'Shop', 'Login', 'Register'];
+import { Link } from "react-router-dom"
+
 const settings = ['Account', 'Dashboard', 'Logout'];
+
+const pages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/" }, { text: "Login", link: "/" }, { text: "Register", link: "/" }]
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -109,13 +112,16 @@ const Navbar = () => {
         <AppBar position="static">
             <Container>
                 <Toolbar>
+
                     <Typography
                         variant="h6"
                         noWrap
                         component="div"
                         sx={{ flexGrow: 1, mr: 2, display: { xs: 'none', md: 'flex' } }}
                     >
-                        LOGO
+                        <Link to="/" className="link">
+                            LOGO
+                        </Link>
                     </Typography>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -148,9 +154,11 @@ const Navbar = () => {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
+                                <Link to={page.link} className="link">
+                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                        <Typography textAlign="center">{page.text}</Typography>
+                                    </MenuItem>
+                                </Link>
                             ))}
                         </Menu>
                     </Box>
@@ -164,13 +172,15 @@ const Navbar = () => {
                     </Typography>
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }}>
                         {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, display: 'block' }}
-                            >
-                                <Typography sx={{ color: "white.main", textTransform: "none" }} textAlign="center">{page}</Typography>
-                            </Button>
+                            <Link to={page.link} className="link">
+                                <Button
+                                    key={page}
+                                    onClick={handleCloseNavMenu}
+                                    sx={{ my: 2, display: 'block' }}
+                                >
+                                    <Typography sx={{ color: "white.main", textTransform: "none" }} textAlign="center">{page.text}</Typography>
+                                </Button>
+                            </Link>
                         ))}
                     </Box>
                     <Box sx={{ mr: 2 }}>
