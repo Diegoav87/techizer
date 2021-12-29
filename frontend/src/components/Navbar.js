@@ -20,10 +20,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { Link } from "react-router-dom"
+import useAuth from '../hooks/useAuth';
 
-const settings = ['Account', 'Dashboard', 'Logout'];
+const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/" }, { text: "Logout", link: "/logout" }]
 
-const pages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/" }, { text: "Login", link: "/" }, { text: "Register", link: "/" }]
+const pages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/" }, { text: "Login", link: "/login" }, { text: "Register", link: "/register" }]
+
+const authPages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/" }]
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -77,6 +80,8 @@ const ExpandMore = styled((props) => {
 }));
 
 const Navbar = () => {
+    const auth = useAuth();
+
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [expandedCategories, setExpandedCategories] = useState(false);
@@ -109,9 +114,9 @@ const Navbar = () => {
     };
 
     return (
-        <AppBar position="static">
-            <Container>
-                <Toolbar>
+        <AppBar position="static" sx={{ backgroundColor: "secondary.main" }}>
+            <Container maxWidth="lg">
+                <Toolbar style={{ padding: "0px" }}>
 
                     <Typography
                         variant="h6"
@@ -120,7 +125,7 @@ const Navbar = () => {
                         sx={{ flexGrow: 1, mr: 2, display: { xs: 'none', md: 'flex' } }}
                     >
                         <Link to="/" className="link">
-                            LOGO
+                            TECHIZER
                         </Link>
                     </Typography>
 
@@ -153,7 +158,13 @@ const Navbar = () => {
                                 display: { xs: 'block', md: 'none' },
                             }}
                         >
-                            {pages.map((page) => (
+                            {auth.user ? authPages.map((page) => (
+                                <Link to={page.link} className="link">
+                                    <MenuItem key={page} onClick={handleCloseNavMenu}>
+                                        <Typography textAlign="center">{page.text}</Typography>
+                                    </MenuItem>
+                                </Link>
+                            )) : pages.map((page) => (
                                 <Link to={page.link} className="link">
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
                                         <Typography textAlign="center">{page.text}</Typography>
@@ -171,7 +182,17 @@ const Navbar = () => {
                         LOGO
                     </Typography>
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }}>
-                        {pages.map((page) => (
+                        {auth.user ? authPages.map((page) => (
+                            <Link to={page.link} className="link">
+                                <Button
+                                    key={page}
+                                    onClick={handleCloseNavMenu}
+                                    sx={{ my: 2, display: 'block' }}
+                                >
+                                    <Typography sx={{ color: "white.main", textTransform: "none" }} textAlign="center">{page.text}</Typography>
+                                </Button>
+                            </Link>
+                        )) : pages.map((page) => (
                             <Link to={page.link} className="link">
                                 <Button
                                     key={page}
@@ -183,35 +204,40 @@ const Navbar = () => {
                             </Link>
                         ))}
                     </Box>
-                    <Box sx={{ mr: 2 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} color="inherit">
-                                <AccountCircleIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
+                    {auth.user && (
+                        <Box sx={{ mr: 2 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} color="inherit">
+                                    <AccountCircleIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {settings.map((setting, index) => (
+                                    <Link to={setting.link} className="link">
+                                        <MenuItem key={index} onClick={handleCloseNavMenu}>
+                                            <Typography textAlign="center">{setting.text}</Typography>
+                                        </MenuItem>
+                                    </Link>
+                                ))}
+                            </Menu>
+                        </Box>
+                    )}
+
                     <Box>
                         <Tooltip title="Open Cart">
                             <IconButton sx={{ p: 0 }} color="inherit">
@@ -221,9 +247,9 @@ const Navbar = () => {
                     </Box>
 
                 </Toolbar>
-                <Toolbar>
+                <Toolbar style={{ padding: "0px" }}>
                     <Box sx={{ mr: 2, flexGrow: 1 }}>
-                        <Button onClick={handleExpandClick} variant="contained" color="secondary" endIcon={
+                        <Button onClick={handleExpandClick} variant="contained" endIcon={
                             <ExpandMore
                                 expand={expandedCategories}
                                 aria-expanded={expandedCategories}

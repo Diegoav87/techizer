@@ -37,7 +37,7 @@ const LatestProducts = (props) => {
 
     return (
         <Box sx={{ backgroundColor: "gray.main" }}>
-            <Container>
+            <Container maxWidth="lg">
                 <Typography sx={{ pt: 5 }} variant="h5" fontWeight={"bold"} color="textPrimary">
                     Latest Products
                 </Typography>

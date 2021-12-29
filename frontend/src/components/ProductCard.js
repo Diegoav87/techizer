@@ -35,7 +35,7 @@ const ProductCard = (props) => {
                 </CardContent>
                 <CardActions sx={{ p: 2, display: "flex", justifyContent: "space-between" }}>
                     <Typography color="text.secondary" variant="body1">${product.regular_price}</Typography>
-                    <Button variant="outlined" color="secondary" size="small">Add to cart</Button>
+                    <Button variant="outlined" size="small">Add to cart</Button>
                 </CardActions>
             </Card>
         </Grid>

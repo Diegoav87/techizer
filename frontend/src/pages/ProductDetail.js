@@ -53,7 +53,7 @@ const ProductDetail = () => {
         <div>
             <Navbar />
             <Box sx={{ backgroundColor: "gray.main" }}>
-                <Container sx={{ pt: 10, pb: 20 }} maxWidth="md">
+                <Container sx={{ pt: 10, pb: 20 }} maxWidth="lg">
                     <Box>
                         <Grid container spacing={20}>
                             <Grid item xs={12} sm={6} md={6}>
@@ -79,12 +79,12 @@ const ProductDetail = () => {
                                         <Rating sx={{ mb: 2, ml: 1 }} name="read-only" value={4} readOnly />
                                     </Box>
 
-                                    <Typography variant="h5" fontWeight="bold" sx={{ mb: 2 }} color="secondary.main">${product.regular_price}</Typography>
+                                    <Typography component="h1" variant="h5" fontWeight="bold" sx={{ mb: 2 }} color="primary.main">${product.regular_price}</Typography>
                                     <Typography sx={{ mb: 2 }}>
                                         {product.in_stock ? "In Stock" : "Out of Stock"}
                                     </Typography>
 
-                                    <Button sx={{ mb: 2, display: "block" }} variant="contained" color="secondary">Add to Cart</Button>
+                                    <Button sx={{ mb: 2, display: "block" }} variant="contained">Add to Cart</Button>
                                 </Box>
                             </Grid>
                         </Grid>

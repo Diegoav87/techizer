@@ -28,6 +28,18 @@ export const fileAxios = axios.create({
     },
 });
 
+export const urlAxios = axios.create({
+    baseURL: baseURL,
+    timeout: 15000,
+    headers: {
+        Authorization: localStorage.getItem("access_token")
+            ? "JWT " + localStorage.getItem("access_token")
+            : null,
+        "Content-Type": "application/x-www-form-urlencoded",
+        accept: "application/json",
+    },
+});
+
 const refreshAxios = axios.create({
     baseURL: baseURL,
     timeout: 5000,
@@ -77,7 +89,7 @@ axiosInstance.interceptors.response.use(
 
                 if (tokenParts.exp > now) {
                     return refreshAxios
-                        .post("token/refresh/", { refresh: refreshToken })
+                        .post("accounts/token/refresh/", { refresh: refreshToken })
                         .then((response) => {
                             localStorage.setItem("access_token", response.data.access);
                             localStorage.setItem("refresh_token", response.data.refresh);

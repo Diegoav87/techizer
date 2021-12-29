@@ -1,18 +1,24 @@
-from rest_framework import serializers
-from .models import CustomUser
 from django.contrib.auth.password_validation import validate_password
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
+
+from rest_framework import serializers
+
+from .models import CustomUser
+from .tokens import account_activation_token
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     username = serializers.CharField(required=True)
+    first_name = serializers.CharField(required=True)
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'username', 'password', 'password2')
+        fields = ('email', 'username', 'password', 'password2', "first_name")
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -38,6 +44,77 @@ class CustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class AccountActivationSerializer(serializers.Serializer):
+    token = serializers.CharField(
+        min_length=1, write_only=True)
+    uidb64 = serializers.CharField(
+        min_length=1, write_only=True)
+
+    class Meta:
+        fields = ['password', 'token', 'uidb64']
+
+    def validate(self, attrs):
+        uidb64 = attrs.get("uidb64", "")
+        token = attrs.get("token", "")
+
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(pk=uid)
+        except:
+            user = None
+
+        if user.is_active == True:
+            raise serializers.ValidationError(
+                {"user": "This user is already active"})
+
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+        else:
+            raise serializers.ValidationError(
+                {"user": "The activation token is invalid"})
+        return attrs
+
+
+class PasswordResetSerializer(serializers.Serializer):
+    password = serializers.CharField(
+        write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+    token = serializers.CharField(
+        min_length=1, write_only=True)
+    uidb64 = serializers.CharField(
+        min_length=1, write_only=True)
+
+    class Meta:
+        fields = ("password", "password2", "token", "uidb64")
+
+    def validate(self, attrs):
+        password = attrs.get("password", "")
+        password2 = attrs.get("password2", "")
+
+        if password != password2:
+            raise serializers.ValidationError(
+                {"password": "Password fields didn't match"})
+
+        uidb64 = attrs.get("uidb64", "")
+        token = attrs.get("token", "")
+
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = CustomUser.objects.get(pk=uid)
+        except:
+            user = None
+
+        if user is not None and account_activation_token.check_token(user, token):
+            user.set_password(password)
+            user.save()
+        else:
+            raise serializers.ValidationError(
+                {"user": "The reset token is invalid"})
+
+        return attrs
 
 
 class GetUserSerializer(serializers.ModelSerializer):
