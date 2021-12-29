@@ -1,6 +1,6 @@
 from django.contrib.auth.password_validation import validate_password
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_text
 
 from rest_framework import serializers
 

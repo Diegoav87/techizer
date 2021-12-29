@@ -12,10 +12,10 @@ import Rating from '@mui/material/Rating';
 import { Link } from "react-router-dom";
 
 const ProductCard = (props) => {
-    const { product } = props;
+    const { product, breakpoints } = props;
 
     return (
-        <Grid item xs={12} sm={4} md={4}>
+        <Grid item xs={breakpoints.xs} sm={breakpoints.sm} md={breakpoints.md}>
             <Card>
                 <Link to={`/products/${product.slug}`}>
                     <CardMedia

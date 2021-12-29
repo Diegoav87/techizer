@@ -14,6 +14,7 @@ import Logout from './components/Logout';
 import RequestPasswordReset from './pages/RequestPasswordReset';
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm';
 import Activate from './components/Activate';
+import ProductsByCategory from './pages/ProductsByCategory';
 
 import useAuth from "./hooks/useAuth";
 
@@ -86,6 +87,7 @@ function App() {
               <Activate />
             </PublicRoute>
           } />
+          <Route exact path="/products/categories/:slug" element={<ProductsByCategory />} />
         </Routes>
       </ThemeProvider>
     </div>

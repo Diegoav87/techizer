@@ -6,12 +6,15 @@ import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./context/auth";
+import { CategoryProvider } from './context/categories';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <AuthProvider>
-        <App />
+        <CategoryProvider>
+          <App />
+        </CategoryProvider>
       </AuthProvider>
     </Router>
   </React.StrictMode>,

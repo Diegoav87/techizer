@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -21,6 +21,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { Link } from "react-router-dom"
 import useAuth from '../hooks/useAuth';
+import useCategories from '../hooks/useCategories';
 
 const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/" }, { text: "Logout", link: "/logout" }]
 
@@ -81,6 +82,7 @@ const ExpandMore = styled((props) => {
 
 const Navbar = () => {
     const auth = useAuth();
+    const categories = useCategories();
 
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -267,9 +269,13 @@ const Navbar = () => {
                                 'aria-labelledby': 'basic-button',
                             }}
                         >
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                            <MenuItem onClick={handleClose}>Logout</MenuItem>
+                            {categories.categories.map(category => {
+                                return (
+                                    <Link to={`/products/categories/${category.slug}`} className="link">
+                                        <MenuItem onClick={handleClose}>{category.name}</MenuItem>
+                                    </Link>
+                                )
+                            })}
                         </Menu>
                     </Box>
                     <Box>
