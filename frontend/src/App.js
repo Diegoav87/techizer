@@ -15,8 +15,10 @@ import RequestPasswordReset from './pages/RequestPasswordReset';
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm';
 import Activate from './components/Activate';
 import ProductsByCategory from './pages/ProductsByCategory';
+import Cart from './pages/Cart';
 
 import useAuth from "./hooks/useAuth";
+import useCart from './hooks/useCart';
 
 import { ToastContainer } from "react-toastify";
 
@@ -45,8 +47,9 @@ const theme = createTheme({
 
 function App() {
   const auth = useAuth();
+  const cart = useCart();
 
-  if (auth.loading) {
+  if (auth.loading || cart.loading) {
     return <Spinner />
   }
 
@@ -88,6 +91,7 @@ function App() {
             </PublicRoute>
           } />
           <Route exact path="/products/categories/:slug" element={<ProductsByCategory />} />
+          <Route exact path="/cart" element={<Cart />} />
         </Routes>
       </ThemeProvider>
     </div>

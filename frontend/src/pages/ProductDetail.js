@@ -14,13 +14,21 @@ import Carousel from "react-material-ui-carousel";
 
 import Spinner from '../components/Spinner';
 import Navbar from "../components/Navbar";
+import QuantitySelect from '../components/QuantitySelect';
+
 import { useParams } from "react-router-dom";
 import axiosInstance from '../helpers/axios';
+import handleError from '../helpers/axiosErrorHandler';
+import useCart from '../hooks/useCart';
+
+import { toast } from "react-toastify";
 
 const ProductDetail = () => {
+    const cart = useCart();
     const { slug } = useParams();
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(true);
+    const [qty, setQty] = useState(1);
 
     const [value, setValue] = useState(0);
 
@@ -37,7 +45,7 @@ const ProductDetail = () => {
                 setLoading(false);
             })
             .catch(err => {
-                console.log(err.response);
+                handleError(err);
             })
     }
 
@@ -47,6 +55,19 @@ const ProductDetail = () => {
 
     if (loading) {
         return <Spinner />
+    }
+
+    const addToCartHandler = () => {
+        if (qty > product.stock_available) {
+            toast.error("This quantity amount is greater than the stock");
+            return;
+        }
+
+        cart.addCartItem(product.slug, qty);
+    }
+
+    const changeQty = (e) => {
+        setQty(e.target.value);
     }
 
     return (
@@ -81,10 +102,14 @@ const ProductDetail = () => {
 
                                     <Typography component="h1" variant="h5" fontWeight="bold" sx={{ mb: 2 }} color="primary.main">${product.regular_price}</Typography>
                                     <Typography sx={{ mb: 2 }}>
-                                        {product.in_stock ? "In Stock" : "Out of Stock"}
+                                        {product.stock_count > 0 ? "In Stock" : "Out of Stock"}
                                     </Typography>
+                                    {product.stock_count > 0 && (
+                                        <QuantitySelect product={product} qty={qty} qtyChange={changeQty} />
+                                    )}
 
-                                    <Button sx={{ mb: 2, display: "block" }} variant="contained">Add to Cart</Button>
+
+                                    <Button onClick={addToCartHandler} sx={{ mb: 2, display: "block" }} variant="contained">Add to Cart</Button>
                                 </Box>
                             </Grid>
                         </Grid>

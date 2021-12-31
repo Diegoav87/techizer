@@ -11,8 +11,15 @@ import Rating from '@mui/material/Rating';
 
 import { Link } from "react-router-dom";
 
+import useCart from '../hooks/useCart';
+
 const ProductCard = (props) => {
+    const cart = useCart();
     const { product, breakpoints } = props;
+
+    const addToCartHandler = (slug) => {
+        cart.addCartItem(slug, 1);
+    }
 
     return (
         <Grid item xs={breakpoints.xs} sm={breakpoints.sm} md={breakpoints.md}>
@@ -35,7 +42,7 @@ const ProductCard = (props) => {
                 </CardContent>
                 <CardActions sx={{ p: 2, display: "flex", justifyContent: "space-between" }}>
                     <Typography color="text.secondary" variant="body1">${product.regular_price}</Typography>
-                    <Button variant="outlined" size="small">Add to cart</Button>
+                    <Button variant="outlined" size="small" onClick={(e) => addToCartHandler(product.slug)}>Add to cart</Button>
                 </CardActions>
             </Card>
         </Grid>

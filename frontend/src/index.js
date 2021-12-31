@@ -7,13 +7,16 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./context/auth";
 import { CategoryProvider } from './context/categories';
+import { CartProvider } from './context/cart';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <AuthProvider>
         <CategoryProvider>
-          <App />
+          <CartProvider>
+            <App />
+          </CartProvider>
         </CategoryProvider>
       </AuthProvider>
     </Router>

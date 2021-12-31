@@ -46,7 +46,7 @@ class Product(models.Model):
         decimal_places=2,
     )
     weight = models.FloatField(verbose_name=_("product weight"))
-    in_stock = models.BooleanField(default=True)
+    stock_count = models.IntegerField(default=0, blank=True)
     is_active = models.BooleanField(
         verbose_name=_("Product visibility"),
         default=True,

@@ -47,8 +47,9 @@ const ProductsByCategory = () => {
     }
 
     useEffect(() => {
+        setLoading(true);
         getProducts();
-    }, [])
+    }, [slug])
 
     if (loading) {
         return <Spinner />
@@ -88,7 +89,7 @@ const ProductsByCategory = () => {
                                     <Box>
                                         {categories.categories.map((category) => {
                                             return (
-                                                <Link className="link" to={`/products/categories/${category.slug}`}>
+                                                <Link key={category.slug} className="link" to={`/products/categories/${category.slug}`}>
                                                     <Typography sx={{ pt: 1, pb: 2 }} variant="subtitle2" color="textSecondary">{category.name}</Typography>
                                                 </Link>
                                             )

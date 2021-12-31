@@ -21,7 +21,11 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { Link } from "react-router-dom"
 import useAuth from '../hooks/useAuth';
+import useCart from '../hooks/useCart';
 import useCategories from '../hooks/useCategories';
+import Badge from '@mui/material/Badge';
+
+import CartSidebar from './CartSidebar';
 
 const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/" }, { text: "Logout", link: "/logout" }]
 
@@ -82,7 +86,18 @@ const ExpandMore = styled((props) => {
 
 const Navbar = () => {
     const auth = useAuth();
+    const cart = useCart();
     const categories = useCategories();
+
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = (open) => (e) => {
+        if (e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
+            return;
+        }
+
+        setSidebarOpen(open);
+    }
 
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -161,13 +176,13 @@ const Navbar = () => {
                             }}
                         >
                             {auth.user ? authPages.map((page) => (
-                                <Link to={page.link} className="link">
+                                <Link to={page.link} className="link" key={page.text}>
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
                                         <Typography textAlign="center">{page.text}</Typography>
                                     </MenuItem>
                                 </Link>
                             )) : pages.map((page) => (
-                                <Link to={page.link} className="link">
+                                <Link to={page.link} className="link" key={page.text}>
                                     <MenuItem key={page} onClick={handleCloseNavMenu}>
                                         <Typography textAlign="center">{page.text}</Typography>
                                     </MenuItem>
@@ -185,7 +200,7 @@ const Navbar = () => {
                     </Typography>
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }}>
                         {auth.user ? authPages.map((page) => (
-                            <Link to={page.link} className="link">
+                            <Link to={page.link} className="link" key={page.text}>
                                 <Button
                                     key={page}
                                     onClick={handleCloseNavMenu}
@@ -195,7 +210,7 @@ const Navbar = () => {
                                 </Button>
                             </Link>
                         )) : pages.map((page) => (
-                            <Link to={page.link} className="link">
+                            <Link to={page.link} className="link" key={page.text}>
                                 <Button
                                     key={page}
                                     onClick={handleCloseNavMenu}
@@ -230,7 +245,7 @@ const Navbar = () => {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting, index) => (
-                                    <Link to={setting.link} className="link">
+                                    <Link to={setting.link} className="link" key={setting.text}>
                                         <MenuItem key={index} onClick={handleCloseNavMenu}>
                                             <Typography textAlign="center">{setting.text}</Typography>
                                         </MenuItem>
@@ -242,8 +257,10 @@ const Navbar = () => {
 
                     <Box>
                         <Tooltip title="Open Cart">
-                            <IconButton sx={{ p: 0 }} color="inherit">
-                                <ShoppingCartIcon />
+                            <IconButton onClick={toggleSidebar(true)} sx={{ p: 0 }} color="inherit">
+                                <Badge badgeContent={cart.getCartLength()} color="primary">
+                                    <ShoppingCartIcon />
+                                </Badge>
                             </IconButton>
                         </Tooltip>
                     </Box>
@@ -271,7 +288,7 @@ const Navbar = () => {
                         >
                             {categories.categories.map(category => {
                                 return (
-                                    <Link to={`/products/categories/${category.slug}`} className="link">
+                                    <Link to={`/products/categories/${category.slug}`} className="link" key={category.name}>
                                         <MenuItem onClick={handleClose}>{category.name}</MenuItem>
                                     </Link>
                                 )
@@ -291,6 +308,7 @@ const Navbar = () => {
                     </Box>
                 </Toolbar>
             </Container>
+            <CartSidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
         </AppBar>
     );
 }
