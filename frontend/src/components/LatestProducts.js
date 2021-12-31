@@ -20,7 +20,7 @@ const LatestProducts = (props) => {
             .get("products/")
             .then(res => {
                 console.log(res.data);
-                setProducts(res.data);
+                setProducts(res.data.results);
                 setLoading(false);
             })
             .catch(err => {

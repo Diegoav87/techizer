@@ -1,52 +1,54 @@
 import React, { useState, useEffect } from 'react';
-
 import Navbar from '../components/Navbar';
-import Spinner from '../components/Spinner';
-import ProductGrid from '../components/ProductGrid';
 import FilterSidebar from '../components/FilterSidebar';
+import ProductGrid from '../components/ProductGrid';
+import Spinner from '../components/Spinner';
 import Paginator from '../components/Paginator';
 import TopBarFilter from '../components/TopBarFilter';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 
-import { useParams } from 'react-router-dom';
+import useCategories from '../hooks/useCategories';
 import axiosInstance from '../helpers/axios';
 import handleError from '../helpers/axiosErrorHandler';
 
-import useCategories from '../hooks/useCategories';
 import usePagination from '../hooks/usePagination';
+import { useSearchParams } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 9;
 
-const ProductsByCategory = () => {
-    const { slug } = useParams();
+
+
+const Shop = () => {
     const categories = useCategories();
+    const [searchParams] = useSearchParams();
+    let keyword = searchParams.get("keyword");
+
+    if (keyword === null) {
+        keyword = '';
+    }
 
     const [products, setProducts] = useState([]);
     const [productCount, setProductCount] = useState(0);
-    const [category, setCategory] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({});
 
     const getProducts = (page = 1) => {
         axiosInstance
-            .get(`products/categories/${slug}/`, {
+            .get("products/", {
                 params: {
                     ...filters,
-                    page: page
+                    page: page,
+                    keyword: keyword
                 }
             })
             .then(res => {
                 console.log(res.data);
                 setProducts(res.data.results);
-                setCategory(res.data.category_name);
                 setProductCount(res.data.count);
                 setLoading(false);
             })
@@ -60,7 +62,7 @@ const ProductsByCategory = () => {
 
     useEffect(() => {
         getProducts();
-    }, [slug, filters])
+    }, [filters, keyword])
 
     return (
         <div>
@@ -69,7 +71,7 @@ const ProductsByCategory = () => {
                 <TopBarFilter heading={
                     (
                         <React.Fragment>
-                            <Typography component="h5" variant="subtitle1" color="textPrimary" fontWeight="bold">{category}</Typography>
+                            <Typography component="h5" variant="subtitle1" color="textPrimary" fontWeight="bold">{keyword === "" ? "All Products" : `Showing results for "${keyword}"`}</Typography>
                             <Typography variant="subtitle2" color="textSecondary">{products.length} results found</Typography>
                         </React.Fragment>
                     )
@@ -90,6 +92,7 @@ const ProductsByCategory = () => {
                                     </Box>
                                 </Box>
                             )}
+
                         </Grid>
                     </Grid>
                 </Container>
@@ -98,4 +101,4 @@ const ProductsByCategory = () => {
     )
 }
 
-export default ProductsByCategory;  
+export default Shop;

@@ -16,6 +16,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
@@ -27,11 +28,16 @@ import Badge from '@mui/material/Badge';
 
 import CartSidebar from './CartSidebar';
 
+import { useNavigate } from 'react-router-dom';
+import { createSearchParams } from 'react-router-dom';
+
 const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/" }, { text: "Logout", link: "/logout" }]
 
-const pages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/" }, { text: "Login", link: "/login" }, { text: "Register", link: "/register" }]
+const pages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/shop" }, { text: "Login", link: "/login" }, { text: "Register", link: "/register" }]
 
-const authPages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/" }]
+const authPages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/shop" }]
+
+
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -63,7 +69,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
@@ -85,6 +90,7 @@ const ExpandMore = styled((props) => {
 }));
 
 const Navbar = () => {
+    const navigate = useNavigate();
     const auth = useAuth();
     const cart = useCart();
     const categories = useCategories();
@@ -129,6 +135,23 @@ const Navbar = () => {
         setAnchorEl(null);
         setExpandedCategories(!expandedCategories);
     };
+
+    const [keyword, setKeyword] = useState("");
+
+    const onKeywordChange = (e) => {
+        setKeyword(e.target.value);
+    }
+
+    const onSearch = (e) => {
+        e.preventDefault();
+
+
+        navigate({
+            pathname: "/shop",
+            search: `?${createSearchParams({ keyword: keyword })}`
+        })
+
+    }
 
     return (
         <AppBar position="static" sx={{ backgroundColor: "secondary.main" }}>
@@ -295,17 +318,27 @@ const Navbar = () => {
                             })}
                         </Menu>
                     </Box>
-                    <Box>
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon />
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </Search>
+
+                    <Box sx={{ pr: 2 }}>
+                        <form onSubmit={onSearch}>
+                            <Search>
+                                <StyledInputBase
+                                    onChange={onKeywordChange}
+                                    sx={{ pl: 2, pr: 2 }}
+                                    placeholder="Search…"
+                                    inputProps={{ 'aria-label': 'search' }}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton type='submit' sx={{ color: "white.main" }} edge="end">
+                                                <SearchIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                />
+                            </Search>
+                        </form>
                     </Box>
+
                 </Toolbar>
             </Container>
             <CartSidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />

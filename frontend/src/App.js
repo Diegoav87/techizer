@@ -16,6 +16,7 @@ import ResetPasswordConfirm from './pages/ResetPasswordConfirm';
 import Activate from './components/Activate';
 import ProductsByCategory from './pages/ProductsByCategory';
 import Cart from './pages/Cart';
+import Shop from './pages/Shop';
 
 import useAuth from "./hooks/useAuth";
 import useCart from './hooks/useCart';
@@ -92,6 +93,7 @@ function App() {
           } />
           <Route exact path="/products/categories/:slug" element={<ProductsByCategory />} />
           <Route exact path="/cart" element={<Cart />} />
+          <Route exact path="/shop" element={<Shop />} />
         </Routes>
       </ThemeProvider>
     </div>

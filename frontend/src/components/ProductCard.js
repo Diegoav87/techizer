@@ -23,7 +23,7 @@ const ProductCard = (props) => {
 
     return (
         <Grid item xs={breakpoints.xs} sm={breakpoints.sm} md={breakpoints.md}>
-            <Card>
+            <Card style={{ minHeight: "100%" }}>
                 <Link to={`/products/${product.slug}`}>
                     <CardMedia
                         component="img"
@@ -32,9 +32,9 @@ const ProductCard = (props) => {
                         image={`http://127.0.0.1:8000${product.get_featured_image.image}`}
                     />
                 </Link>
-                <CardContent>
+                <CardContent style={{ minHeight: "100%" }}>
                     <Link to={`/products/${product.slug}`} className="link">
-                        <Typography gutterBottom variant="h5" component="div">
+                        <Typography sx={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }} fontWeight="bold" gutterBottom variant="subtitle1" component="h5">
                             {product.title}
                         </Typography>
                     </Link>
