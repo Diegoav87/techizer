@@ -91,3 +91,17 @@ class ProductImage(models.Model):
     class Meta:
         verbose_name = _("Product Image")
         verbose_name_plural = _("Product Images")
+
+
+class Review(models.Model):
+    user = models.ForeignKey(
+        CustomUser, related_name="reviews", on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, related_name="reviews", on_delete=models.CASCADE)
+    text = models.TextField(max_length=500)
+    rating = models.PositiveIntegerField()
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"By {self.user.username} for {self.product.title}: {self.rating}"

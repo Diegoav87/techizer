@@ -9,8 +9,8 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.pagination import PageNumberPagination
 
-from .serializers import ProductListSerializer, ProductDetailSerializer, CategorySerializer
-from .models import Product, Category
+from .serializers import ProductListSerializer, ProductDetailSerializer, CategorySerializer, ReviewCreateSerializer
+from .models import Product, Category, Review
 from utils.pagination import CategoryPagination
 
 # Create your views here.
@@ -74,3 +74,18 @@ def get_product(request, slug):
     product = get_object_or_404(Product, slug=slug)
     serializer = ProductDetailSerializer(product)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_review(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    serializer = ReviewCreateSerializer(data=request.data)
+
+    if product.reviews.filter(user=request.user).exists():
+        return Response({"review": ["Product already reviewed"]}, status=status.HTTP_400_BAD_REQUEST)
+
+    if serializer.is_valid():
+        serializer.save(user=request.user, product=product)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -31,7 +31,7 @@ import CartSidebar from './CartSidebar';
 import { useNavigate } from 'react-router-dom';
 import { createSearchParams } from 'react-router-dom';
 
-const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/" }, { text: "Logout", link: "/logout" }]
+const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/dashboard" }, { text: "Logout", link: "/logout" }]
 
 const pages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/shop" }, { text: "Login", link: "/login" }, { text: "Register", link: "/register" }]
 
@@ -40,7 +40,6 @@ const authPages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/shop" }]
 
 
 const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
@@ -52,16 +51,6 @@ const Search = styled('div')(({ theme }) => ({
         marginLeft: theme.spacing(1),
         width: 'auto',
     },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -319,7 +308,7 @@ const Navbar = () => {
                         </Menu>
                     </Box>
 
-                    <Box sx={{ pr: 2 }}>
+                    <Box>
                         <form onSubmit={onSearch}>
                             <Search>
                                 <StyledInputBase

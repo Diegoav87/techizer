@@ -15,6 +15,8 @@ import Carousel from "react-material-ui-carousel";
 import Spinner from '../components/Spinner';
 import Navbar from "../components/Navbar";
 import QuantitySelect from '../components/QuantitySelect';
+import ReviewForm from '../components/Reviews/ReviewForm';
+import ReviewList from '../components/Reviews/ReviewList';
 
 import { useParams } from "react-router-dom";
 import axiosInstance from '../helpers/axios';
@@ -127,7 +129,8 @@ const ProductDetail = () => {
                             </Typography>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            Reviews
+                            <ReviewList reviews={product.reviews} />
+                            <ReviewForm product={product} getProduct={getProduct} />
                         </TabPanel>
                     </Box>
                 </Container>

@@ -17,6 +17,7 @@ import Activate from './components/Activate';
 import ProductsByCategory from './pages/ProductsByCategory';
 import Cart from './pages/Cart';
 import Shop from './pages/Shop';
+import Dashboard from './pages/Dashboard';
 
 import useAuth from "./hooks/useAuth";
 import useCart from './hooks/useCart';
@@ -74,6 +75,11 @@ function App() {
           <Route exact path="/logout" element={
             <PrivateRoute>
               <Logout />
+            </PrivateRoute>
+          } />
+          <Route exact path="/dashboard" element={
+            <PrivateRoute>
+              <Dashboard />
             </PrivateRoute>
           } />
           <Route exact path="/reset-password" element={

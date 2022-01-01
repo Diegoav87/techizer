@@ -120,21 +120,13 @@ class PasswordResetSerializer(serializers.Serializer):
 class GetUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ("id", "username", "email")
+        fields = ("id", "username", "email", "first_name")
 
 
 class UserEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ("username", "email")
-
-    def validate_email(self, value):
-        request = self.context.get("request", "")
-        user = request.user
-
-        if CustomUser.objects.exclude(pk=user.pk).filter(email=value).exists():
-            raise serializers.ValidationError("This email is already in use")
-        return value
+        fields = ("username", "first_name")
 
     def validate_username(self, value):
         request = self.context.get("request", "")

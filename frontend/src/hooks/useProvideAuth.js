@@ -4,11 +4,10 @@ import axiosInstance from "../helpers/axios";
 
 const useProvideAuth = () => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const getUser = () => {
-        setLoading(true);
         axiosInstance
             .get("accounts/get_user/")
             .then((res) => {
