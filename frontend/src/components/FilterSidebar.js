@@ -8,7 +8,6 @@ import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import Rating from '@mui/material/Rating';
-
 import { Link } from 'react-router-dom';
 
 const FilterSidebar = (props) => {
@@ -16,6 +15,20 @@ const FilterSidebar = (props) => {
         const price = e.target.value;
         props.setFilters({ ...props.filters, [e.target.name]: price });
         props.setLoading(true);
+    }
+
+    const handleRatingCheckbox = (e) => {
+        console.log(e.target.value);
+        console.log(e.target.checked);
+
+        if (e.target.checked) {
+            props.setFilters({ ...props.filters, rating: [...props.filters.rating, e.target.value] });
+        } else {
+            const ratings = props.filters.rating.filter(rating => rating !== e.target.value);
+            props.setFilters({ ...props.filters, rating: ratings })
+        }
+        props.setLoading(true);
+
     }
 
     return (
@@ -57,7 +70,7 @@ const FilterSidebar = (props) => {
                         {[1, 2, 3, 4, 5].map(number => {
                             return (
                                 <Box sx={{ pt: 1, pb: 1, display: "flex", alignItems: "center" }}>
-                                    <Checkbox />
+                                    <Checkbox value={number} onChange={handleRatingCheckbox} />
                                     <Rating readOnly value={number} />
                                 </Box>
                             )

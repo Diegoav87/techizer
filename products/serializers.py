@@ -38,18 +38,20 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductListSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
+    average_rating = serializers.IntegerField()
 
     class Meta:
         model = Product
         fields = ("title", "description", "slug",
-                  "regular_price", "category", "id", "get_featured_image")
+                  "regular_price", "category", "id", "get_featured_image", "average_rating")
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     reviews = ReviewGetSerializer(read_only=True, many=True)
     product_images = ProductImageSerializer(read_only=True, many=True)
+    average_rating = serializers.IntegerField()
 
     class Meta:
         model = Product
         fields = ("title", "description", "slug", "regular_price",
-                  "category", "stock_count", "weight", "product_images", "id", "get_featured_image", "reviews")
+                  "category", "stock_count", "weight", "product_images", "id", "get_featured_image", "reviews", "average_rating")

@@ -33,7 +33,9 @@ const ProductsByCategory = () => {
     const [category, setCategory] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const [filters, setFilters] = useState({});
+    const [filters, setFilters] = useState({
+        rating: []
+    });
 
     const getProducts = (page = 1) => {
         axiosInstance

@@ -1,5 +1,6 @@
 from django.core.paginator import Page
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Avg
 
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
@@ -20,9 +21,10 @@ from utils.pagination import CategoryPagination
 def get_products_by_category(request, slug):
     min_price = request.GET.get("min_price", "")
     max_price = request.GET.get("max_price", "")
+    ratings = request.GET.getlist("rating[]")
 
     category = Category.objects.get(slug=slug)
-    products = Product.objects.filter(
+    products = Product.objects.annotate(average_rating=Avg("reviews__rating")).filter(
         category=category).order_by("-created_at")
 
     if min_price != "":
@@ -30,6 +32,14 @@ def get_products_by_category(request, slug):
 
     if max_price != "":
         products = products.filter(regular_price__lte=float(max_price))
+
+    if len(ratings) > 0:
+        int_ratings = []
+
+        for rating in ratings:
+            int_ratings.append(int(rating))
+
+        products = products.filter(average_rating__in=int_ratings)
 
     paginator = CategoryPagination()
     paginator.page_size = 9
@@ -51,8 +61,9 @@ def products(request):
     min_price = request.GET.get("min_price", "")
     max_price = request.GET.get("max_price", "")
     query = request.GET.get("keyword", "")
+    ratings = request.GET.getlist("rating[]")
 
-    products = Product.objects.filter(
+    products = Product.objects.annotate(average_rating=Avg("reviews__rating")).filter(
         is_active=True, title__icontains=query).order_by("-created_at")
 
     if min_price != "":
@@ -60,6 +71,14 @@ def products(request):
 
     if max_price != "":
         products = products.filter(regular_price__lte=float(max_price))
+
+    if len(ratings) > 0:
+        int_ratings = []
+
+        for rating in ratings:
+            int_ratings.append(int(rating))
+
+        products = products.filter(average_rating__in=int_ratings)
 
     paginator = PageNumberPagination()
     paginator.page_size = 9
@@ -70,8 +89,17 @@ def products(request):
 
 
 @api_view(['GET'])
+def get_latest_products(request):
+    products = Product.objects.annotate(average_rating=Avg("reviews__rating")).filter(
+        average_rating__gte=4).order_by('-created_at')[:6]
+    serializer = ProductListSerializer(products, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
 def get_product(request, slug):
-    product = get_object_or_404(Product, slug=slug)
+    product = get_object_or_404(Product.objects.annotate(
+        average_rating=Avg("reviews__rating")), slug=slug)
     serializer = ProductDetailSerializer(product)
     return Response(serializer.data, status=status.HTTP_200_OK)
 

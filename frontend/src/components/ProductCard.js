@@ -38,7 +38,7 @@ const ProductCard = (props) => {
                             {product.title}
                         </Typography>
                     </Link>
-                    <Rating name="read-only" value={4} readOnly />
+                    <Rating name="read-only" value={product.average_rating} readOnly />
                 </CardContent>
                 <CardActions sx={{ p: 2, display: "flex", justifyContent: "space-between" }}>
                     <Typography color="text.secondary" variant="body1">${product.regular_price}</Typography>

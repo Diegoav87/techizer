@@ -17,6 +17,7 @@ import handleError from '../helpers/axiosErrorHandler';
 
 import usePagination from '../hooks/usePagination';
 import { useSearchParams } from 'react-router-dom';
+import * as qs from 'qs';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -35,9 +36,12 @@ const Shop = () => {
     const [productCount, setProductCount] = useState(0);
     const [loading, setLoading] = useState(false);
 
-    const [filters, setFilters] = useState({});
+    const [filters, setFilters] = useState({
+        rating: []
+    });
 
     const getProducts = (page = 1) => {
+        console.log(filters);
         axiosInstance
             .get("products/", {
                 params: {

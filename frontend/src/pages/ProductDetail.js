@@ -99,7 +99,7 @@ const ProductDetail = () => {
                                     </Typography>
                                     <Box sx={{ display: "flex" }}>
                                         <Typography>Rating</Typography>
-                                        <Rating sx={{ mb: 2, ml: 1 }} name="read-only" value={4} readOnly />
+                                        <Rating sx={{ mb: 2, ml: 1 }} name="read-only" value={product.average_rating} readOnly />
                                     </Box>
 
                                     <Typography component="h1" variant="h5" fontWeight="bold" sx={{ mb: 2 }} color="primary.main">${product.regular_price}</Typography>
