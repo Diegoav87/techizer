@@ -55,3 +55,9 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         model = Product
         fields = ("title", "description", "slug", "regular_price",
                   "category", "stock_count", "weight", "product_images", "id", "get_featured_image", "reviews", "average_rating")
+
+
+class GetProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ("title", "regular_price", "slug", "get_featured_image")

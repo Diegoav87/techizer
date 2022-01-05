@@ -17,7 +17,11 @@ import Activate from './components/Activate';
 import ProductsByCategory from './pages/ProductsByCategory';
 import Cart from './pages/Cart';
 import Shop from './pages/Shop';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Checkout from './pages/Checkout';
+import OrderList from './pages/Dashboard/OrderList';
+import ProfileForm from './pages/Dashboard/ProfileForm';
+import OrderDetail from './pages/Dashboard/OrderDetail';
 
 import useAuth from "./hooks/useAuth";
 import useCart from './hooks/useCart';
@@ -81,7 +85,23 @@ function App() {
             <PrivateRoute>
               <Dashboard />
             </PrivateRoute>
-          } />
+          }>
+            <Route exact path="profile" element={
+              <PrivateRoute>
+                <ProfileForm />
+              </PrivateRoute>
+            } />
+            <Route exact path="orders" element={
+              <PrivateRoute>
+                <OrderList />
+              </PrivateRoute>
+            } />
+            <Route exact path="orders/:id" element={
+              <PrivateRoute>
+                <OrderDetail />
+              </PrivateRoute>
+            } />
+          </Route>
           <Route exact path="/reset-password" element={
             <PublicRoute>
               <RequestPasswordReset />
@@ -100,6 +120,11 @@ function App() {
           <Route exact path="/products/categories/:slug" element={<ProductsByCategory />} />
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/shop" element={<Shop />} />
+          <Route exact path="/checkout" element={
+            <PrivateRoute>
+              <Checkout />
+            </PrivateRoute>
+          } />
         </Routes>
       </ThemeProvider>
     </div>

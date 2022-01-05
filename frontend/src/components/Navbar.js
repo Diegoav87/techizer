@@ -31,7 +31,7 @@ import CartSidebar from './CartSidebar';
 import { useNavigate } from 'react-router-dom';
 import { createSearchParams } from 'react-router-dom';
 
-const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/dashboard" }, { text: "Logout", link: "/logout" }]
+const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/dashboard/orders" }, { text: "Logout", link: "/logout" }]
 
 const pages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/shop" }, { text: "Login", link: "/login" }, { text: "Register", link: "/register" }]
 

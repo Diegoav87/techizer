@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 const useProvideAuth = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const SHIPPING_COST = 9.99;
 
     const getCartItems = () => {
         if (localStorage.getItem("cartItems")) {
@@ -69,16 +70,24 @@ const useProvideAuth = () => {
         return 0;
     }
 
-    const getCartTotal = () => {
+    const getCartSubtotal = () => {
         if (cartItems.length > 0) {
             const cartTotal = cartItems.reduce((previousValue, currentValue) => {
-                console.log(previousValue, currentValue);
                 return (parseFloat(previousValue) + (currentValue.regular_price * currentValue.qty)).toFixed(2);
             }, 0)
             return cartTotal;
         } else {
             return 0;
         }
+    }
+
+    const getCartTotal = () => {
+        return (parseFloat(getCartSubtotal()) + SHIPPING_COST).toFixed(2);
+    }
+
+    const clearCart = () => {
+        setCartItems([]);
+        localStorage.removeItem("cartItems");
     }
 
     useEffect(() => {
@@ -92,6 +101,9 @@ const useProvideAuth = () => {
         deleteCartItem,
         getCartLength,
         getCartTotal,
+        getCartSubtotal,
+        clearCart,
+        SHIPPING_COST,
         loading
     }
 }

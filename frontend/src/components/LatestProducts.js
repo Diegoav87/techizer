@@ -17,10 +17,10 @@ const LatestProducts = (props) => {
 
     const getProducts = () => {
         axiosInstance
-            .get("products/")
+            .get("products/latest/")
             .then(res => {
                 console.log(res.data);
-                setProducts(res.data.results);
+                setProducts(res.data);
                 setLoading(false);
             })
             .catch(err => {

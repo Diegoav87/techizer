@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import ProfileForm from '../components/Dashboard/ProfileForm';
+import Navbar from '../../components/Navbar';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import PersonIcon from '@mui/icons-material/Person';
+
+import { Outlet, Link } from 'react-router-dom';
 
 const Dashboard = () => {
     const [value, setValue] = useState(0);
@@ -22,7 +21,7 @@ const Dashboard = () => {
     return (
         <div>
             <Navbar />
-            <Box sx={{ backgroundColor: "gray.main" }}>
+            <Box sx={{ backgroundColor: "gray.main" }} style={{ minHeight: "100vh" }}>
                 <Container maxWidth="lg" sx={{ pb: 5, pt: 5 }}>
 
                     <Box>
@@ -34,16 +33,11 @@ const Dashboard = () => {
                                 onChange={handleChange}
                                 sx={{ borderRight: 1, borderColor: 'divider' }}
                             >
-                                <Tab icon={<ShoppingBagOutlinedIcon />} iconPosition="start" label="Orders" {...a11yProps(0)} />
-                                <Tab icon={<PersonIcon />} label="Profile" iconPosition="start" {...a11yProps(1)} />
+                                <Tab component={Link} to="orders" icon={<ShoppingBagOutlinedIcon />} iconPosition="start" label="Orders" {...a11yProps(0)} />
+                                <Tab component={Link} to="profile" icon={<PersonIcon />} label="Profile" iconPosition="start" {...a11yProps(1)} />
                             </Tabs>
                         </Paper>
-                        <TabPanel value={value} index={0}>
-                            Orders
-                        </TabPanel>
-                        <TabPanel value={value} index={1}>
-                            <ProfileForm />
-                        </TabPanel>
+                        <Outlet />
                     </Box>
 
                 </Container>
@@ -52,25 +46,6 @@ const Dashboard = () => {
     )
 }
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-}
 
 function a11yProps(index) {
     return {

@@ -18,7 +18,7 @@ const useProvideAuth = () => {
                 }
             })
             .catch((err) => {
-                console.log(err);
+                console.log(err.response);
                 setIsAuthenticated(false);
                 setUser(null);
                 setLoading(false);

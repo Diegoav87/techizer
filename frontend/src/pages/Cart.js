@@ -34,7 +34,7 @@ const Cart = () => {
     return (
         <div>
             <Navbar />
-            <Box sx={{ backgroundColor: "gray.main" }}>
+            <Box sx={{ backgroundColor: "gray.main" }} style={{ minHeight: "100vh" }}>
                 <Container sx={{ pt: 5, pb: 20 }} maxWidth="lg">
                     <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                         <ShoppingBagIcon color="secondary" sx={{ pr: 1 }} />
@@ -43,7 +43,7 @@ const Cart = () => {
                     <Box>
                         <Grid container spacing={2}>
                             <Grid item md={8} sm={12} xs={12}>
-                                {cart.cartItems.map(item => {
+                                {cart.cartItems.length > 0 ? cart.cartItems.map(item => {
                                     return (
                                         <Box sx={{ mb: 2 }}>
                                             <Paper elevation={3} sx={{ p: 2 }}>
@@ -65,7 +65,18 @@ const Cart = () => {
                                             </Paper>
                                         </Box>
                                     )
-                                })}
+                                }) : (
+                                    <Paper elevation={3} sx={{ p: 2 }}>
+                                        <Typography variant="body1" color="textPrimary">
+                                            You don't have items in your cart. Enter the shop to add some.
+                                        </Typography>
+                                        <Box sx={{ mt: 2 }}>
+                                            <Link to="/shop" className="link">
+                                                <Button color="primary" variant="contained">Go to Shop</Button>
+                                            </Link>
+                                        </Box>
+                                    </Paper>
+                                )}
                             </Grid>
                             <Grid item md={4} sm={12} xs={12}>
                                 <Box>
@@ -80,12 +91,19 @@ const Cart = () => {
                                             <Typography color="textSecondary" component="span" variant="subtitle1">
                                                 Total:
                                             </Typography>
-                                            <Typography component="h6" variant="h6" color="primary">${cart.getCartTotal()}</Typography>
+                                            <Typography component="h6" variant="h6" color="primary">${cart.getCartSubtotal()}</Typography>
                                         </Box>
                                         <Box sx={{ mt: 2 }}>
-                                            <Link to="/checkout" className="link">
-                                                <Button fullWidth color="primary" variant="contained">Checkout</Button>
-                                            </Link>
+                                            {cart.cartItems.length === 0 ? (
+
+                                                <Button fullWidth disabled color="primary" variant="contained">Checkout</Button>
+
+                                            ) : (
+                                                <Link to="/checkout" className="link">
+                                                    <Button fullWidth color="primary" variant="contained">Checkout</Button>
+                                                </Link>
+                                            )}
+
                                         </Box>
                                     </Paper>
                                 </Box>
