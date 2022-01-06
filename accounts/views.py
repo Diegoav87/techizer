@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.template.loader import render_to_string
 
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,9 +12,10 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import generics
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.pagination import PageNumberPagination
 
 
-from .serializers import CustomUserSerializer, GetUserSerializer, UserEditSerializer, UpdatePasswordSerializer, AccountActivationSerializer, PasswordResetSerializer
+from .serializers import CustomUserSerializer, GetUserSerializer, UserEditSerializer, UpdatePasswordSerializer, AccountActivationSerializer, PasswordResetSerializer, AdminUserEditSerializer
 from accounts.models import CustomUser
 from .utils import Util
 from .tokens import account_activation_token
@@ -88,6 +89,27 @@ def get_user(request):
     return Response({"user": serializer.data})
 
 
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_user_by_id(request, id):
+    user = get_object_or_404(CustomUser, id=id)
+    serializer = GetUserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_users(request):
+    users = CustomUser.objects.all()
+
+    paginator = PageNumberPagination()
+    paginator.page_size = 9
+    users = paginator.paginate_queryset(users, request)
+
+    serializer = GetUserSerializer(users, many=True)
+    return paginator.get_paginated_response(serializer.data)
+
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def edit_user(request):
@@ -98,6 +120,27 @@ def edit_user(request):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def admin_user_edit(request, id):
+    user = get_object_or_404(CustomUser, id=id)
+    serializer = AdminUserEditSerializer(
+        instance=user, data=request.data, partial=True, context={"user": user})
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def delete_user(request, id):
+    user = get_object_or_404(CustomUser, id=id)
+    user.delete()
+    return Response(status=status.HTTP_200_OK)
 
 
 class BlacklistTokenUpdateView(APIView):

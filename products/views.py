@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from rest_framework import serializers, status
 from rest_framework.parsers import MultiPartParser
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.pagination import PageNumberPagination
 
 from .serializers import ProductListSerializer, ProductDetailSerializer, CategorySerializer, ReviewCreateSerializer
 from .models import Product, Category, Review

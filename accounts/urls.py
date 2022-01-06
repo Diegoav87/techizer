@@ -14,5 +14,9 @@ urlpatterns = [
     path("token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path("request_password_reset/", views.request_password_reset),
-    path("password_reset/", views.password_reset)
+    path("password_reset/", views.password_reset),
+    path('users/', views.get_users),
+    path('users/<int:id>/', views.get_user_by_id),
+    path('users/edit/<int:id>/', views.admin_user_edit),
+    path('users/delete/<int:id>/', views.delete_user),
 ]

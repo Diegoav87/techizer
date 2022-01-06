@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/Navbar';
-import FilterSidebar from '../components/FilterSidebar';
-import ProductGrid from '../components/ProductGrid';
-import Spinner from '../components/Spinner';
-import Paginator from '../components/Paginator';
-import TopBarFilter from '../components/TopBarFilter';
+import Navbar from '../../components/Navbar';
+import FilterSidebar from '../../components/Products/FilterSidebar';
+import ProductGrid from '../../components/Products/ProductGrid';
+import Spinner from '../../components/Spinner';
+import Paginator from '../../components/Paginator';
+import TopBarFilter from '../../components/Products/TopBarFilter';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
-import useCategories from '../hooks/useCategories';
-import axiosInstance from '../helpers/axios';
-import handleError from '../helpers/axiosErrorHandler';
+import useCategories from '../../hooks/useCategories';
+import axiosInstance from '../../helpers/axios';
+import handleError from '../../helpers/axiosErrorHandler';
 
-import usePagination from '../hooks/usePagination';
+import usePagination from '../../hooks/usePagination';
 import { useSearchParams } from 'react-router-dom';
-import * as qs from 'qs';
 
 const ITEMS_PER_PAGE = 9;
 

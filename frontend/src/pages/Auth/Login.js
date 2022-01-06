@@ -8,30 +8,30 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
+import GoogleIcon from '@mui/icons-material/Google';
 
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 
 import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-import axiosInstance from '../helpers/axios';
+import useAuth from '../../hooks/useAuth';
+import axiosInstance from '../../helpers/axios';
 import * as yup from "yup";
 import { toast } from 'react-toastify';
-import handleError from '../helpers/axiosErrorHandler';
 
-const Register = () => {
+const Login = () => {
+    const auth = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
     const [formData, setFormData] = useState({
-        first_name: "",
-        username: "",
         email: "",
         password: "",
-        password2: ""
     })
 
-    const registerFormSchema = yup.object().shape({
-        first_name: yup.string().required("First name is required"),
-        username: yup.string().required("Username is required"),
+    const loginFormSchema = yup.object().shape({
         email: yup
             .string()
             .email("Invalid email format")
@@ -40,10 +40,6 @@ const Register = () => {
             .string()
             .required("Password is required")
             .min(8, "Password must have at least 8 characters"),
-        password2: yup
-            .string()
-            .required("Password confirmation is required")
-            .oneOf([yup.ref("password")], "Passwords must match"),
     });
 
     const handleInputChange = (e) => {
@@ -53,19 +49,29 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        registerFormSchema
+        loginFormSchema
             .validate(formData)
             .then((valid) => {
                 if (valid) {
                     axiosInstance
-                        .post("accounts/register/", formData)
+                        .post("accounts/token/", formData)
                         .then((res) => {
-                            console.log(res.data);
-                            toast.success("A verification was email sent");
-                            navigate("/login");
+                            localStorage.setItem("access_token", res.data.access);
+                            localStorage.setItem("refresh_token", res.data.refresh);
+                            axiosInstance.defaults.headers["Authorization"] =
+                                "JWT " + localStorage.getItem("access_token");
+                            toast.success("Login successful");
+                            auth.getUser();
+                            navigate(location.state?.from === undefined ? "/" : location.state.from.pathname, { replace: true });
                         })
                         .catch((err) => {
-                            handleError(err);
+                            console.log(err.response);
+
+                            if (err.response.status === 401) {
+                                toast.error("Invalid credentials");
+                            } else {
+                                toast.error("Something went wrong, please try again later")
+                            }
                         });
                 }
             })
@@ -83,15 +89,9 @@ const Register = () => {
                     <Avatar sx={{ ml: "auto", mr: "auto", mb: 2, backgroundColor: "primary.main" }}>
                         <LockOutlinedIcon />
                     </Avatar>
-                    <Typography sx={{ mb: 2 }} component="h1" variant="h5" fontWeight={"bold"} color="textPrimary">Register</Typography>
+                    <Typography sx={{ mb: 2 }} component="h1" variant="h5" fontWeight={"bold"} color="textPrimary">Login</Typography>
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField onChange={handleInputChange} name="first_name" placeholder="Enter First Name" variant="outlined" required fullWidth label="First Name" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField onChange={handleInputChange} name="username" placeholder="Enter Username" variant="outlined" required fullWidth label="Username" />
-                            </Grid>
                             <Grid item xs={12}>
                                 <TextField onChange={handleInputChange} type="email" name="email" placeholder="Enter Email" variant="outlined" required fullWidth label="Email" />
                             </Grid>
@@ -99,15 +99,20 @@ const Register = () => {
                                 <TextField onChange={handleInputChange} type="password" name="password" placeholder="Enter Password" variant="outlined" required fullWidth label="Password" />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField onChange={handleInputChange} type="password" name="password2" placeholder="Confirm Password" variant="outlined" required fullWidth label="Confirm Password" />
-                            </Grid>
-                            <Grid item xs={12}>
                                 <Button type="submit" variant="contained" fullWidth>
-                                    Register
+                                    Login
                                 </Button>
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography>You already have an account? <Link to="/login">Login</Link></Typography>
+                                <Button style={{ backgroundColor: "#4285f4" }} fullWidth variant="contained" startIcon={<GoogleIcon />}>
+                                    Sign in with Google
+                                </Button>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography>You don't have an account? <Link to="/register">Register</Link></Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography>Forgot your password? <Link to="/reset-password">Reset Password</Link></Typography>
                             </Grid>
                         </Grid>
                     </form>
@@ -117,4 +122,4 @@ const Register = () => {
     )
 }
 
-export default Register;
+export default Login;

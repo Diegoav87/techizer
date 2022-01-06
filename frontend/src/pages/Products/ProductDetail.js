@@ -12,16 +12,16 @@ import Tab from '@mui/material/Tab';
 
 import Carousel from "react-material-ui-carousel";
 
-import Spinner from '../components/Spinner';
-import Navbar from "../components/Navbar";
-import QuantitySelect from '../components/QuantitySelect';
-import ReviewForm from '../components/Reviews/ReviewForm';
-import ReviewList from '../components/Reviews/ReviewList';
+import Spinner from '../../components/Spinner';
+import Navbar from "../../components/Navbar";
+import QuantitySelect from '../../components/Products/QuantitySelect';
+import ReviewForm from '../../components/Reviews/ReviewForm';
+import ReviewList from '../../components/Reviews/ReviewList';
 
 import { useParams } from "react-router-dom";
-import axiosInstance from '../helpers/axios';
-import handleError from '../helpers/axiosErrorHandler';
-import useCart from '../hooks/useCart';
+import axiosInstance from '../../helpers/axios';
+import handleError from '../../helpers/axiosErrorHandler';
+import useCart from '../../hooks/useCart';
 
 import { toast } from "react-toastify";
 

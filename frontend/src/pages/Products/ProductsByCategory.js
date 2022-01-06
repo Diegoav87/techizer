@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-import Navbar from '../components/Navbar';
-import Spinner from '../components/Spinner';
-import ProductGrid from '../components/ProductGrid';
-import FilterSidebar from '../components/FilterSidebar';
-import Paginator from '../components/Paginator';
-import TopBarFilter from '../components/TopBarFilter';
+import Navbar from '../../components/Navbar';
+import Spinner from '../../components/Spinner';
+import ProductGrid from '../../components/Products/ProductGrid';
+import FilterSidebar from '../../components/Products/FilterSidebar';
+import Paginator from '../../components/Paginator';
+import TopBarFilter from '../../components/Products/TopBarFilter';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -16,11 +16,11 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 import { useParams } from 'react-router-dom';
-import axiosInstance from '../helpers/axios';
-import handleError from '../helpers/axiosErrorHandler';
+import axiosInstance from '../../helpers/axios';
+import handleError from '../../helpers/axiosErrorHandler';
 
-import useCategories from '../hooks/useCategories';
-import usePagination from '../hooks/usePagination';
+import useCategories from '../../hooks/useCategories';
+import usePagination from '../../hooks/usePagination';
 
 const ITEMS_PER_PAGE = 9;
 

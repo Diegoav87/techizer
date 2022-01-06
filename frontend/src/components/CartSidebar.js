@@ -10,7 +10,7 @@ import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import ClearIcon from '@mui/icons-material/Clear';
 import IconButton from '@mui/material/IconButton';
 
-import QuantitySelect from './QuantitySelect';
+import QuantitySelect from './Products/QuantitySelect';
 
 import { Link } from 'react-router-dom';
 

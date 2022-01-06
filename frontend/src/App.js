@@ -4,24 +4,29 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Routes, Route } from 'react-router-dom';
 import PrivateRoute from "./routing/PrivateRoute";
 import PublicRoute from "./routing/PublicRoute";
+import AdminRoute from './routing/AdminRoute';
 
 import Spinner from './components/Spinner';
 import Home from './pages/Home';
-import ProductDetail from './pages/ProductDetail';
-import Register from "./pages/Register";
-import Login from './pages/Login';
-import Logout from './components/Logout';
-import RequestPasswordReset from './pages/RequestPasswordReset';
-import ResetPasswordConfirm from './pages/ResetPasswordConfirm';
-import Activate from './components/Activate';
-import ProductsByCategory from './pages/ProductsByCategory';
+import ProductDetail from './pages/Products/ProductDetail';
+import Register from "./pages/Auth/Register";
+import Login from './pages/Auth/Login';
+import Logout from './components/Auth/Logout';
+import RequestPasswordReset from './pages/Auth/RequestPasswordReset';
+import ResetPasswordConfirm from './pages/Auth/ResetPasswordConfirm';
+import Activate from './components/Auth/Activate';
+import ProductsByCategory from './pages/Products/ProductsByCategory';
 import Cart from './pages/Cart';
-import Shop from './pages/Shop';
+import Shop from './pages/Products/Shop';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Checkout from './pages/Checkout';
 import OrderList from './pages/Dashboard/OrderList';
 import ProfileForm from './pages/Dashboard/ProfileForm';
 import OrderDetail from './pages/Dashboard/OrderDetail';
+import Admin from './pages/Admin/Admin';
+import UserList from './pages/Admin/UserList';
+import EditUser from './pages/Admin/EditUser';
+import ProductList from './pages/Admin/ProductList';
 
 import useAuth from "./hooks/useAuth";
 import useCart from './hooks/useCart';
@@ -125,6 +130,27 @@ function App() {
               <Checkout />
             </PrivateRoute>
           } />
+          <Route exact path="/admin" element={
+            <AdminRoute>
+              <Admin />
+            </AdminRoute>
+          }>
+            <Route exact path="users" element={
+              <AdminRoute>
+                <UserList />
+              </AdminRoute>
+            } />
+            <Route exact path="users/edit/:id" element={
+              <AdminRoute>
+                <EditUser />
+              </AdminRoute>
+            } />
+            <Route exact path="products" element={
+              <AdminRoute>
+                <ProductList />
+              </AdminRoute>
+            } />
+          </Route>
         </Routes>
       </ThemeProvider>
     </div>

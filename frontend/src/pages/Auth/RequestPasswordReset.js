@@ -9,12 +9,12 @@ import TextField from '@mui/material/TextField';
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import Avatar from '@mui/material/Avatar';
 
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 
 import * as yup from "yup";
-import axiosInstance from '../helpers/axios';
+import axiosInstance from '../../helpers/axios';
 import { toast } from 'react-toastify';
-import handleError from '../helpers/axiosErrorHandler';
+import handleError from '../../helpers/axiosErrorHandler';
 
 const RequestPasswordReset = () => {
     const [formData, setFormData] = useState({ email: "" })

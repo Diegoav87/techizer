@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 
-import Spinner from './Spinner';
+import Spinner from '../Spinner';
 
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 
-import axiosInstance from '../helpers/axios';
+import axiosInstance from '../../helpers/axios';
 
 const Logout = () => {
     const auth = useAuth();

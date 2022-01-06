@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import Navbar from '../components/Navbar';
+import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -7,57 +6,62 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 
+import Navbar from '../../components/Navbar';
+
+import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
+
+import axiosInstance from '../../helpers/axios';
 import * as yup from "yup";
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import handleError from '../helpers/axiosErrorHandler';
-import axiosInstance from '../helpers/axios';
+import handleError from '../../helpers/axiosErrorHandler';
 
-const ResetPasswordConfirm = () => {
-    let { uidb64, token } = useParams();
+const Register = () => {
     const navigate = useNavigate();
-
     const [formData, setFormData] = useState({
+        first_name: "",
+        username: "",
+        email: "",
         password: "",
-        password2: "",
-    });
+        password2: ""
+    })
 
-    const passwordFormSchema = yup.object().shape({
+    const registerFormSchema = yup.object().shape({
+        first_name: yup.string().required("First name is required"),
+        username: yup.string().required("Username is required"),
+        email: yup
+            .string()
+            .email("Invalid email format")
+            .required("Email is required"),
         password: yup
             .string()
             .required("Password is required")
             .min(8, "Password must have at least 8 characters"),
         password2: yup
             .string()
-            .required("Password is required")
+            .required("Password confirmation is required")
             .oneOf([yup.ref("password")], "Passwords must match"),
     });
 
     const handleInputChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    }
 
-    const sendResetPasswordConfirmation = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
-        passwordFormSchema
+        registerFormSchema
             .validate(formData)
             .then((valid) => {
                 if (valid) {
                     axiosInstance
-                        .post("accounts/password_reset/", {
-                            uidb64: uidb64,
-                            token: token,
-                            password: formData.password,
-                            password2: formData.password2,
-                        })
+                        .post("accounts/register/", formData)
                         .then((res) => {
                             console.log(res.data);
-                            toast.success("Password reseted correctly")
+                            toast.success("A verification was email sent");
                             navigate("/login");
                         })
                         .catch((err) => {
@@ -65,10 +69,11 @@ const ResetPasswordConfirm = () => {
                         });
                 }
             })
-            .catch(function (err) {
+            .catch((err) => {
+                console.log(err.message);
                 toast.error(err.message);
             });
-    };
+    }
 
     return (
         <div>
@@ -76,11 +81,20 @@ const ResetPasswordConfirm = () => {
             <Box sx={{ mt: 5, mb: 10 }}>
                 <Container maxWidth="xs" sx={{ textAlign: "center" }}>
                     <Avatar sx={{ ml: "auto", mr: "auto", mb: 2, backgroundColor: "primary.main" }}>
-                        <VpnKeyOutlinedIcon />
+                        <LockOutlinedIcon />
                     </Avatar>
-                    <Typography sx={{ mb: 2 }} component="h1" variant="h5" fontWeight={"bold"} color="textPrimary">Reset Password</Typography>
-                    <form onSubmit={sendResetPasswordConfirmation}>
+                    <Typography sx={{ mb: 2 }} component="h1" variant="h5" fontWeight={"bold"} color="textPrimary">Register</Typography>
+                    <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField onChange={handleInputChange} name="first_name" placeholder="Enter First Name" variant="outlined" required fullWidth label="First Name" />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField onChange={handleInputChange} name="username" placeholder="Enter Username" variant="outlined" required fullWidth label="Username" />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField onChange={handleInputChange} type="email" name="email" placeholder="Enter Email" variant="outlined" required fullWidth label="Email" />
+                            </Grid>
                             <Grid item xs={12}>
                                 <TextField onChange={handleInputChange} type="password" name="password" placeholder="Enter Password" variant="outlined" required fullWidth label="Password" />
                             </Grid>
@@ -89,8 +103,11 @@ const ResetPasswordConfirm = () => {
                             </Grid>
                             <Grid item xs={12}>
                                 <Button type="submit" variant="contained" fullWidth>
-                                    Update Password
+                                    Register
                                 </Button>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography>You already have an account? <Link to="/login">Login</Link></Typography>
                             </Grid>
                         </Grid>
                     </form>
@@ -100,4 +117,4 @@ const ResetPasswordConfirm = () => {
     )
 }
 
-export default ResetPasswordConfirm;
+export default Register;

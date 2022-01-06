@@ -17,6 +17,9 @@ import { useParams } from 'react-router';
 
 import axiosInstance from '../../helpers/axios';
 import handleError from '../../helpers/axiosErrorHandler';
+import { toast } from 'react-toastify';
+
+import { PayPalButton } from "react-paypal-button-v2";
 
 const steps = ['Placed', 'Paid', 'Delivered'];
 
@@ -25,6 +28,7 @@ const OrderDetail = () => {
     const [order, setOrder] = useState({});
     const [loading, setLoading] = useState(true);
     const [activeStep, setActiveStep] = useState(1);
+    const [sdkReady, setSdkReady] = useState(false);
 
     const getOrder = () => {
         axiosInstance
@@ -37,6 +41,12 @@ const OrderDetail = () => {
                     setActiveStep(2);
                 } else if (res.data.is_paid && res.data.is_delivered) {
                     setActiveStep(3);
+                } else {
+                    if (!window.paypal) {
+                        addPayPalScript();
+                    } else {
+                        setSdkReady(true);
+                    }
                 }
 
                 setLoading(false);
@@ -49,6 +59,30 @@ const OrderDetail = () => {
     useEffect(() => {
         getOrder();
     }, [])
+
+    const successPaymentHandler = (paymentResult) => {
+        axiosInstance
+            .put(`orders/pay/${order.id}/`)
+            .then(res => {
+                console.log(res.data);
+                toast.success("Payment successful");
+                getOrder();
+            })
+            .catch(err => {
+                handleError(err);
+            })
+    }
+
+    const addPayPalScript = () => {
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://www.paypal.com/sdk/js?client-id=AbunHlmDsNTOUwsg6uFVY8IVT6pA3cRHkLcf2s_am0xT2UDscbhQZ0-_I8vkPjVPCX4DTPQXFgMmquYc';
+        script.async = true;
+        script.onload = () => {
+            setSdkReady(true);
+        }
+        document.body.appendChild(script);
+    }
 
     if (loading) {
         return <Spinner />
@@ -89,6 +123,15 @@ const OrderDetail = () => {
                             </Typography>
                             <Typography component="h6" variant="subtitle1" color="textPrimary" fontWeight="bold">{order.payment_method}</Typography>
                         </Box>
+                        {!order.is_paid && (
+                            <Box sx={{ mt: 2 }}>
+                                {!sdkReady ? (
+                                    <Spinner />
+                                ) : (
+                                    <PayPalButton amount={order.total_paid} onSuccess={successPaymentHandler} />
+                                )}
+                            </Box>
+                        )}
                     </Paper>
                     <Paper sx={{ p: 3, mt: 2 }}>
                         <Box sx={{ mb: 2 }}>

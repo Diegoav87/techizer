@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Navbar from './Navbar';
+import Navbar from '../Navbar';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -14,8 +14,8 @@ import Avatar from '@mui/material/Avatar';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import handleError from '../helpers/axiosErrorHandler';
-import axiosInstance from '../helpers/axios';
+import handleError from '../../helpers/axiosErrorHandler';
+import axiosInstance from '../../helpers/axios';
 
 const Activate = () => {
     let { uidb64, token } = useParams();

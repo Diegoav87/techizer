@@ -31,7 +31,9 @@ import CartSidebar from './CartSidebar';
 import { useNavigate } from 'react-router-dom';
 import { createSearchParams } from 'react-router-dom';
 
-const settings = [{ text: "Account", link: "/" }, { text: "Dashboard", link: "/dashboard/orders" }, { text: "Logout", link: "/logout" }]
+const settings = [{ text: "Dashboard", link: "/dashboard/orders" }, { text: "Logout", link: "/logout" }]
+
+const adminSettings = [{ text: "Admin", link: "/admin/users" }, { text: "Dashboard", link: "/dashboard/orders" }, { text: "Logout", link: "/logout" }]
 
 const pages = [{ text: "Home", link: "/" }, { text: "Shop", link: "/shop" }, { text: "Login", link: "/login" }, { text: "Register", link: "/register" }]
 
@@ -256,7 +258,13 @@ const Navbar = () => {
                                 open={Boolean(anchorElUser)}
                                 onClose={handleCloseUserMenu}
                             >
-                                {settings.map((setting, index) => (
+                                {auth.user.is_staff ? adminSettings.map((setting, index) => (
+                                    <Link to={setting.link} className="link" key={setting.text}>
+                                        <MenuItem key={index} onClick={handleCloseNavMenu}>
+                                            <Typography textAlign="center">{setting.text}</Typography>
+                                        </MenuItem>
+                                    </Link>
+                                )) : settings.map((setting, index) => (
                                     <Link to={setting.link} className="link" key={setting.text}>
                                         <MenuItem key={index} onClick={handleCloseNavMenu}>
                                             <Typography textAlign="center">{setting.text}</Typography>

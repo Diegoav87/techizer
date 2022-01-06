@@ -7,9 +7,9 @@ import Grid from '@mui/material/Grid';
 
 import ProductCard from './ProductCard';
 import ProductGrid from './ProductGrid';
-import Spinner from './Spinner';
+import Spinner from '../Spinner';
 
-import axiosInstance from '../helpers/axios';
+import axiosInstance from '../../helpers/axios';
 
 const LatestProducts = (props) => {
     const [products, setProducts] = useState([]);

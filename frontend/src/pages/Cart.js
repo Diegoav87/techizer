@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import QuantitySelect from '../components/QuantitySelect';
+import QuantitySelect from '../components/Products/QuantitySelect';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
