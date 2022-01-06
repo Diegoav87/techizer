@@ -1,8 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.db.models.signals import pre_save, post_save
 
 from accounts.models import CustomUser
+from .utils import slugify_instance_title
 
 # Create your models here.
 
@@ -34,7 +36,7 @@ class Product(models.Model):
     )
     description = models.TextField(
         verbose_name=_("description"), max_length=1000)
-    slug = models.SlugField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
     regular_price = models.DecimalField(
         verbose_name=_("Regular price"),
         max_digits=5,
@@ -105,3 +107,21 @@ class Review(models.Model):
 
     def __str__(self):
         return f"By {self.user.username} for {self.product.title}: {self.rating}"
+
+
+def product_pre_save(sender, instance, *args, **kwargs):
+    # print('pre_save')
+    if instance.slug is None:
+        slugify_instance_title(instance, save=False)
+
+
+pre_save.connect(product_pre_save, sender=Product)
+
+
+def product_post_save(sender, instance, created, *args, **kwargs):
+    # print('post_save')
+    if created:
+        slugify_instance_title(instance, save=True)
+
+
+post_save.connect(product_post_save, sender=Product)

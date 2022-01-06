@@ -74,6 +74,21 @@ const ProductList = () => {
             })
     }
 
+    const deleteProduct = (id) => {
+        axiosInstance
+            .delete(`products/delete/${id}/`)
+            .then(res => {
+                console.log(res.data);
+                toast.success("Product deleted");
+                getProducts();
+            })
+            .catch(err => {
+                handleError(err);
+            })
+
+        handleClose();
+    }
+
     useEffect(() => {
         getProducts();
     }, [])
@@ -113,7 +128,7 @@ const ProductList = () => {
                                 <TableCell>${product.regular_price}</TableCell>
                                 <TableCell>{product.category.name}</TableCell>
                                 <TableCell>
-                                    <Link className="link" to={`edit/${product.id}`}>
+                                    <Link className="link" to={`edit/${product.slug}`}>
                                         <IconButton>
                                             <EditIcon />
                                         </IconButton>
@@ -135,7 +150,7 @@ const ProductList = () => {
                         onPageChange={onPageChange}
                         currentPage={currentPage}
                     />
-                    <Button variant="contained">Add Product</Button>
+                    <Link className="link" to="create"><Button variant="contained">Add Product</Button></Link>
                 </Box>
 
             </Box>
@@ -159,7 +174,7 @@ const ProductList = () => {
                             Deleting a product will permamently remove it from the database and all its data.
                         </Typography>
                         <Box sx={{ mt: 2, display: "flex" }}>
-                            <Button fullWidth color="error" variant="contained" sx={{ mr: 2 }}>Delete Product</Button>
+                            <Button onClick={(e) => deleteProduct(currentId)} fullWidth color="error" variant="contained" sx={{ mr: 2 }}>Delete Product</Button>
                             <Button onClick={handleClose} fullWidth color="secondary" variant="contained">Keep Product</Button>
                         </Box>
                     </Box>

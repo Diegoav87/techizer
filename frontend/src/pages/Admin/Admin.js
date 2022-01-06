@@ -11,13 +11,10 @@ import PersonIcon from '@mui/icons-material/Person';
 import InventoryIcon from '@mui/icons-material/Inventory';
 
 import { Outlet, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const Admin = () => {
-    const [value, setValue] = useState(0);
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-    };
+    let location = useLocation();
 
     return (
         <div>
@@ -30,13 +27,12 @@ const Admin = () => {
                             <Tabs
                                 orientation="horizontal"
                                 variant="standard"
-                                value={value}
-                                onChange={handleChange}
+                                value={location.pathname}
                                 sx={{ borderRight: 1, borderColor: 'divider' }}
                             >
-                                <Tab component={Link} to="users" icon={<PersonIcon />} iconPosition="start" label="Users" {...a11yProps(0)} />
+                                <Tab component={Link} to="users" icon={<PersonIcon />} iconPosition="start" label="Users" {...a11yProps(0)} value="/admin/users" />
                                 <Tab component={Link} to="orders" icon={<ShoppingBagOutlinedIcon />} label="Orders" iconPosition="start" {...a11yProps(1)} />
-                                <Tab component={Link} to="products" icon={<InventoryIcon />} label="Products" iconPosition="start" {...a11yProps(1)} />
+                                <Tab component={Link} value="/admin/products" to="products" icon={<InventoryIcon />} label="Products" iconPosition="start" {...a11yProps(1)} />
                             </Tabs>
                         </Paper>
                         <Outlet />

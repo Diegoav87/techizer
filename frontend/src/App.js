@@ -27,6 +27,8 @@ import Admin from './pages/Admin/Admin';
 import UserList from './pages/Admin/UserList';
 import EditUser from './pages/Admin/EditUser';
 import ProductList from './pages/Admin/ProductList';
+import AddProduct from './pages/Admin/AddProduct';
+import EditProduct from './pages/Admin/EditProduct';
 
 import useAuth from "./hooks/useAuth";
 import useCart from './hooks/useCart';
@@ -148,6 +150,16 @@ function App() {
             <Route exact path="products" element={
               <AdminRoute>
                 <ProductList />
+              </AdminRoute>
+            } />
+            <Route exact path="products/create" element={
+              <AdminRoute>
+                <AddProduct />
+              </AdminRoute>
+            } />
+            <Route exact path="products/edit/:slug" element={
+              <AdminRoute>
+                <EditProduct />
               </AdminRoute>
             } />
           </Route>
