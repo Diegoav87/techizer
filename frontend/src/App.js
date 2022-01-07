@@ -20,15 +20,17 @@ import Cart from './pages/Cart';
 import Shop from './pages/Products/Shop';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Checkout from './pages/Checkout';
-import OrderList from './pages/Dashboard/OrderList';
+import DashboardOrderList from './pages/Dashboard/DashboardOrderList';
 import ProfileForm from './pages/Dashboard/ProfileForm';
-import OrderDetail from './pages/Dashboard/OrderDetail';
+import DashboardOrderDetail from './pages/Dashboard/DashboardOrderDetail';
 import Admin from './pages/Admin/Admin';
 import UserList from './pages/Admin/UserList';
 import EditUser from './pages/Admin/EditUser';
 import ProductList from './pages/Admin/ProductList';
 import AddProduct from './pages/Admin/AddProduct';
 import EditProduct from './pages/Admin/EditProduct';
+import AdminOrderList from './pages/Admin/AdminOrderList';
+import AdminOrderDetail from './pages/Admin/AdminOrderDetail';
 
 import useAuth from "./hooks/useAuth";
 import useCart from './hooks/useCart';
@@ -100,15 +102,15 @@ function App() {
             } />
             <Route exact path="orders" element={
               <PrivateRoute>
-                <OrderList />
+                <DashboardOrderList />
               </PrivateRoute>
             } />
             <Route exact path="orders/:id" element={
               <PrivateRoute>
-                <OrderDetail />
+                <DashboardOrderDetail />
               </PrivateRoute>
             } />
-          </Route>
+          </Route>a
           <Route exact path="/reset-password" element={
             <PublicRoute>
               <RequestPasswordReset />
@@ -150,6 +152,16 @@ function App() {
             <Route exact path="products" element={
               <AdminRoute>
                 <ProductList />
+              </AdminRoute>
+            } />
+            <Route exact path="orders" element={
+              <AdminRoute>
+                <AdminOrderList />
+              </AdminRoute>
+            } />
+            <Route exact path="orders/:id" element={
+              <AdminRoute>
+                <AdminOrderDetail />
               </AdminRoute>
             } />
             <Route exact path="products/create" element={

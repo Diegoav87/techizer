@@ -5,12 +5,14 @@ import handleError from "../helpers/axiosErrorHandler";
 
 const useProvideCategories = () => {
     const [categories, setCategories] = useState([]);
+    const [categoryLoading, setCategoryLoading] = useState(true);
 
     const getCategories = () => {
         axiosInstance
             .get("products/categories/")
             .then(res => {
                 setCategories(res.data);
+                setCategoryLoading(false);
             })
             .catch(err => {
                 handleError(err);
@@ -23,7 +25,8 @@ const useProvideCategories = () => {
 
     return {
         categories,
-        getCategories
+        getCategories,
+        categoryLoading
     }
 }
 

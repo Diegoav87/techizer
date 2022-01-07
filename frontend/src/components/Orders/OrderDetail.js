@@ -4,6 +4,7 @@ import AddressDetails from '../../components/Checkout/AddressDetails';
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
@@ -23,7 +24,7 @@ import { PayPalButton } from "react-paypal-button-v2";
 
 const steps = ['Placed', 'Paid', 'Delivered'];
 
-const OrderDetail = () => {
+const OrderDetail = (props) => {
     const { id } = useParams();
     const [order, setOrder] = useState({});
     const [loading, setLoading] = useState(true);
@@ -42,10 +43,12 @@ const OrderDetail = () => {
                 } else if (res.data.is_paid && res.data.is_delivered) {
                     setActiveStep(3);
                 } else {
-                    if (!window.paypal) {
-                        addPayPalScript();
-                    } else {
-                        setSdkReady(true);
+                    if (!props.admin) {
+                        if (!window.paypal) {
+                            addPayPalScript();
+                        } else {
+                            setSdkReady(true);
+                        }
                     }
                 }
 
@@ -82,6 +85,19 @@ const OrderDetail = () => {
             setSdkReady(true);
         }
         document.body.appendChild(script);
+    }
+
+    const setOrderAsDelivered = () => {
+        axiosInstance
+            .put(`orders/deliver/${order.id}/`)
+            .then(res => {
+                console.log(res.data);
+                toast.success("Order mark as delivered");
+                getOrder();
+            })
+            .catch(err => {
+                handleError(err);
+            })
     }
 
     if (loading) {
@@ -123,7 +139,7 @@ const OrderDetail = () => {
                             </Typography>
                             <Typography component="h6" variant="subtitle1" color="textPrimary" fontWeight="bold">{order.payment_method}</Typography>
                         </Box>
-                        {!order.is_paid && (
+                        {!props.admin && !order.is_paid && (
                             <Box sx={{ mt: 2 }}>
                                 {!sdkReady ? (
                                     <Spinner />
@@ -163,6 +179,11 @@ const OrderDetail = () => {
                             </Typography>
                             <Typography fontWeight="bold" component="h6" variant="subtitle1" color="textPrimary">{order.delivered_at ? moment(order.delivered_at).format("DD/MM/YYYY") : "Not Delivered"}</Typography>
                         </Box>
+                        {props.admin && order.is_paid && !order.is_delivered && (
+                            <Box sx={{ mt: 2, mb: 2 }}>
+                                <Button fullWidth variant="contained" onClick={setOrderAsDelivered}> Mark as Delivered</Button>
+                            </Box>
+                        )}
                     </Paper>
                 </Grid>
                 <Grid item xs={12} sm={12} md={8}>

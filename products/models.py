@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.db.models.signals import pre_save, post_save
 
 from accounts.models import CustomUser
-from .utils import slugify_instance_title
+from .utils import slugify_instance_title, create_alt_text
 
 # Create your models here.
 
@@ -115,7 +115,13 @@ def product_pre_save(sender, instance, *args, **kwargs):
         slugify_instance_title(instance, save=False)
 
 
+def image_pre_save(sender, instance, *args, **kwargs):
+    if instance.alt_text is None:
+        create_alt_text(instance, save=False)
+
+
 pre_save.connect(product_pre_save, sender=Product)
+pre_save.connect(image_pre_save, sender=ProductImage)
 
 
 def product_post_save(sender, instance, created, *args, **kwargs):
@@ -124,4 +130,11 @@ def product_post_save(sender, instance, created, *args, **kwargs):
         slugify_instance_title(instance, save=True)
 
 
+def image_post_save(sender, instance, created, *args, **kwargs):
+    # print('post_save')
+    if created:
+        create_alt_text(instance, save=True)
+
+
 post_save.connect(product_post_save, sender=Product)
+post_save.connect(image_post_save, sender=ProductImage)

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Spinner from "../../components/Spinner";
+import Spinner from "../Spinner";
+import Paginator from '../Paginator';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -18,19 +19,28 @@ import axiosInstance from '../../helpers/axios';
 import handleError from '../../helpers/axiosErrorHandler';
 
 import { Link } from 'react-router-dom';
+import usePagination from '../../hooks/usePagination';
 
 import moment from "moment";
 
-const OrderList = () => {
+const ITEMS_PER_PAGE = 9;
+
+const OrderList = (props) => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [orderCount, setOrderCount] = useState(0);
 
-    const getOrders = () => {
+    const getOrders = (page = 1) => {
         axiosInstance
-            .get("orders/user/")
+            .get(props.url, {
+                params: {
+                    page: page
+                }
+            })
             .then(res => {
                 console.log(res.data)
-                setOrders(res.data);
+                setOrders(res.data.results);
+                setOrderCount(res.data.count);
                 setLoading(false);
             })
             .catch(err => {
@@ -41,6 +51,9 @@ const OrderList = () => {
     useEffect(() => {
         getOrders();
     }, [])
+
+    const { currentPage, changePage, pageCount } = usePagination(ITEMS_PER_PAGE, orderCount, getOrders);
+    const onPageChange = (event, value) => changePage(value);
 
     if (loading) {
         return <Spinner />
@@ -84,6 +97,13 @@ const OrderList = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <Box sx={{ mt: 4 }}>
+                <Paginator
+                    pageCount={pageCount}
+                    onPageChange={onPageChange}
+                    currentPage={currentPage}
+                />
+            </Box>
         </Box>
     )
 }

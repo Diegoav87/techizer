@@ -23,3 +23,12 @@ def slugify_instance_title(instance, save=False, new_slug=None):
     if save:
         instance.save()
     return instance
+
+
+def create_alt_text(instance, save=False):
+    alt_text = slugify(instance.image.name)
+    instance.alt_text = alt_text
+
+    if save:
+        instance.save()
+    return instance

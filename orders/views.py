@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import OR, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from decimal import Decimal
 from datetime import date, datetime
 
@@ -70,9 +71,14 @@ def create_order(request, address_id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_orders(request):
-    orders = request.user.orders.all()
+    orders = request.user.orders.all().order_by('-created_at')
+
+    paginator = PageNumberPagination()
+    paginator.page_size = 9
+    orders = paginator.paginate_queryset(orders, request)
+
     serializer = ListOrderSerializer(orders, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return paginator.get_paginated_response(serializer.data)
 
 
 @api_view(['GET'])
@@ -93,3 +99,28 @@ def update_order_to_paid(request, id):
     order.save()
 
     return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAdminUser])
+def update_order_to_delivered(request, id):
+    order = get_object_or_404(Order, id=id)
+
+    order.is_delivered = True
+    order.delivered_at = datetime.now()
+    order.save()
+
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_all_orders(request):
+    orders = Order.objects.all().order_by("-created_at")
+
+    paginator = PageNumberPagination()
+    paginator.page_size = 9
+    orders = paginator.paginate_queryset(orders, request)
+
+    serializer = ListOrderSerializer(orders, many=True)
+    return paginator.get_paginated_response(serializer.data)

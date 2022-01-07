@@ -31,7 +31,7 @@ const Admin = () => {
                                 sx={{ borderRight: 1, borderColor: 'divider' }}
                             >
                                 <Tab component={Link} to="users" icon={<PersonIcon />} iconPosition="start" label="Users" {...a11yProps(0)} value="/admin/users" />
-                                <Tab component={Link} to="orders" icon={<ShoppingBagOutlinedIcon />} label="Orders" iconPosition="start" {...a11yProps(1)} />
+                                <Tab component={Link} to="orders" value="/admin/orders" icon={<ShoppingBagOutlinedIcon />} label="Orders" iconPosition="start" {...a11yProps(1)} />
                                 <Tab component={Link} value="/admin/products" to="products" icon={<InventoryIcon />} label="Products" iconPosition="start" {...a11yProps(1)} />
                             </Tabs>
                         </Paper>

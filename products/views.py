@@ -10,7 +10,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.pagination import PageNumberPagination
 
 from .serializers import ProductListSerializer, ProductDetailSerializer, CategorySerializer, ReviewCreateSerializer, CreateProductSerializer
-from .models import Product, Category, Review
+from .models import Product, Category, Review, ProductImage
 from utils.pagination import CategoryPagination
 
 # Create your views here.
@@ -124,8 +124,8 @@ def create_product(request):
     serializer = CreateProductSerializer(data=request.data)
 
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        product = serializer.save()
+        return Response({"id": product.id}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -147,4 +147,22 @@ def edit_product(request, slug):
 def delete_product(request, id):
     product = get_object_or_404(Product, id=id)
     product.delete()
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+@parser_classes([MultiPartParser])
+def product_image_upload(request, id):
+    product = get_object_or_404(Product, id=id)
+    image = request.data.get("image", "")
+    is_feature = request.data.get("is_feature", "")
+
+    if is_feature == "true":
+        is_feature = True
+    elif is_feature == "false":
+        is_feature = False
+
+    product_image = ProductImage.objects.create(
+        image=image, is_feature=is_feature, product=product)
     return Response(status=status.HTTP_200_OK)

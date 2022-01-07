@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import MultipleImageUpload from './MultipleImageUpload';
+import Spinner from '../Spinner';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -9,6 +11,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 import axiosInstance from '../../helpers/axios';
+import { fileAxios } from '../../helpers/axios';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import handleError from '../../helpers/axiosErrorHandler';
@@ -29,7 +32,7 @@ const ProductForm = (props) => {
         weight: props.product.weight,
         stock_count: props.product.stock_count,
     } : {
-        category: categories.categories[0].name,
+        category: "",
         title: "",
         description: "",
         regular_price: "",
@@ -39,6 +42,7 @@ const ProductForm = (props) => {
     }
 
     const [formData, setFormData] = useState(productData);
+    const [files, setFiles] = useState([]);
 
     const productFormSchema = yup.object().shape({
         category: yup.string().required("Category is required"),
@@ -75,11 +79,39 @@ const ProductForm = (props) => {
                                 handleError(err);
                             })
                     } else {
+                        if (files.length === 0) {
+                            toast.error("You need to upload at least one image");
+                            return;
+                        }
+
+                        if (files.find(file => file.is_feature === true) === undefined) {
+                            toast.error("Select at least one image to be the featured image");
+                            return;
+                        }
+
                         axiosInstance
                             .post(url, formData)
                             .then(res => {
                                 console.log(res.data);
                                 toast.success("Product created");
+
+                                files.forEach(file => {
+                                    const data = new FormData();
+                                    data.append("image", file.file);
+                                    data.append("is_feature", file.is_feature);
+
+                                    fileAxios
+                                        .post(`products/images/${res.data.id}/`, data)
+                                        .then(res => {
+                                            console.log(res.data);
+                                            toast.success("Image uploaded");
+                                        })
+                                        .catch(err => {
+                                            toast.error("There was an error uploading one of the images");
+                                        })
+
+                                })
+
                                 navigate("/admin/products");
                             })
                             .catch(err => {
@@ -131,6 +163,13 @@ const ProductForm = (props) => {
                         <FormLabel sx={{ mb: 1 }} component="legend">Stock</FormLabel>
                         <TextField size="small" value={formData.stock_count} onChange={handleInputChange} type="number" name="stock_count" placeholder="Enter Stock" variant="outlined" required fullWidth />
                     </Grid>
+                    {!props.editing && (
+                        <Grid item xs={12} md={12} sm={12}>
+                            <FormLabel sx={{ mb: 1 }} component="legend">Product Images</FormLabel>
+                            <MultipleImageUpload files={files} setFiles={setFiles} maxFileLength={3} />
+                        </Grid>
+                    )}
+
                     <Grid item xs={12} md={12} sm={12} alignSelf={"end"}>
                         <Button variant="contained" fullWidth onClick={submitProduct}>
                             Submit
