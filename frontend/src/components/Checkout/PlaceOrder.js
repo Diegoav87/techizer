@@ -88,7 +88,7 @@ const PlaceOrder = (props) => {
                 </Grid>
                 <OrderDetails buttons={
                     <React.Fragment>
-                        <Button onClick={submitOrder} fullWidth variant="contained">Place Order</Button>
+                        <Button disabled={cart.cartItems.length === 0} onClick={submitOrder} fullWidth variant="contained">Place Order</Button>
                         <Button sx={{ mt: 1 }} onClick={goBackToPayment} fullWidth variant="outlined">Back to Payment</Button>
                     </React.Fragment>
                 } />

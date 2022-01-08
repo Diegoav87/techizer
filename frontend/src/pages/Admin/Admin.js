@@ -3,12 +3,14 @@ import Navbar from '../../components/Navbar';
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 import { Outlet, Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -21,7 +23,14 @@ const Admin = () => {
             <Navbar />
             <Box sx={{ backgroundColor: "gray.main" }} style={{ minHeight: "100vh" }}>
                 <Container maxWidth="lg" sx={{ pb: 5, pt: 5 }}>
-
+                    <Box maxWidth="lg" sx={{ mb: 2 }}>
+                        <Breadcrumbs aria-label="breadcrumb">
+                            <Link className="link" to="/">
+                                Home
+                            </Link>
+                            <Typography color="text.primary">Admin</Typography>
+                        </Breadcrumbs>
+                    </Box>
                     <Box>
                         <Paper sx={{ mb: 2 }}>
                             <Tabs

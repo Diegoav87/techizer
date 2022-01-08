@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import Button from '@mui/material/Button';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 import useCart from '../hooks/useCart';
 
@@ -35,7 +36,16 @@ const Cart = () => {
         <div>
             <Navbar />
             <Box sx={{ backgroundColor: "gray.main" }} style={{ minHeight: "100vh" }}>
+
                 <Container sx={{ pt: 5, pb: 20 }} maxWidth="lg">
+                    <Box maxWidth="lg" sx={{ mb: 2 }}>
+                        <Breadcrumbs aria-label="breadcrumb">
+                            <Link className="link" to="/">
+                                Home
+                            </Link>
+                            <Typography color="text.primary">Cart</Typography>
+                        </Breadcrumbs>
+                    </Box>
                     <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                         <ShoppingBagIcon color="secondary" sx={{ pr: 1 }} />
                         <Typography component="h5" variant="h6" color="textPrimary" fontWeight="bold">{cart.getCartLength()} Items</Typography>

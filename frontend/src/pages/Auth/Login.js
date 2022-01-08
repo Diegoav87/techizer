@@ -104,11 +104,6 @@ const Login = () => {
                                 </Button>
                             </Grid>
                             <Grid item xs={12}>
-                                <Button style={{ backgroundColor: "#4285f4" }} fullWidth variant="contained" startIcon={<GoogleIcon />}>
-                                    Sign in with Google
-                                </Button>
-                            </Grid>
-                            <Grid item xs={12}>
                                 <Typography>You don't have an account? <Link to="/register">Register</Link></Typography>
                             </Grid>
                             <Grid item xs={12}>

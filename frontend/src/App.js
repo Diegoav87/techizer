@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import PrivateRoute from "./routing/PrivateRoute";
 import PublicRoute from "./routing/PublicRoute";
 import AdminRoute from './routing/AdminRoute';
+import CheckoutRoute from './routing/CheckoutRoute';
 
 import Spinner from './components/Spinner';
 import Home from './pages/Home';
@@ -110,7 +111,7 @@ function App() {
                 <DashboardOrderDetail />
               </PrivateRoute>
             } />
-          </Route>a
+          </Route>
           <Route exact path="/reset-password" element={
             <PublicRoute>
               <RequestPasswordReset />
@@ -130,9 +131,9 @@ function App() {
           <Route exact path="/cart" element={<Cart />} />
           <Route exact path="/shop" element={<Shop />} />
           <Route exact path="/checkout" element={
-            <PrivateRoute>
+            <CheckoutRoute>
               <Checkout />
-            </PrivateRoute>
+            </CheckoutRoute>
           } />
           <Route exact path="/admin" element={
             <AdminRoute>

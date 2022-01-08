@@ -10,17 +10,18 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 import useCategories from '../../hooks/useCategories';
 import axiosInstance from '../../helpers/axios';
 import handleError from '../../helpers/axiosErrorHandler';
 
+import { Link } from 'react-router-dom';
+
 import usePagination from '../../hooks/usePagination';
 import { useSearchParams } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 9;
-
-
 
 const Shop = () => {
     const categories = useCategories();
@@ -36,7 +37,8 @@ const Shop = () => {
     const [loading, setLoading] = useState(false);
 
     const [filters, setFilters] = useState({
-        rating: []
+        rating: [],
+        sort: "-created_at"
     });
 
     const getProducts = (page = 1) => {
@@ -70,7 +72,16 @@ const Shop = () => {
     return (
         <div>
             <Navbar />
+
             <Box sx={{ backgroundColor: "gray.main" }}>
+                <Container maxWidth="lg" sx={{ pt: 5 }}>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link className="link" to="/">
+                            Home
+                        </Link>
+                        <Typography color="text.primary">Shop</Typography>
+                    </Breadcrumbs>
+                </Container>
                 <TopBarFilter heading={
                     (
                         <React.Fragment>
@@ -78,7 +89,7 @@ const Shop = () => {
                             <Typography variant="subtitle2" color="textSecondary">{products.length} results found</Typography>
                         </React.Fragment>
                     )
-                } />
+                } filters={filters} setFilters={setFilters} />
                 <Container maxWidth="lg" sx={{ pb: 5 }}>
                     <Grid container spacing={2}>
                         <FilterSidebar categories={categories} filters={filters} setFilters={setFilters} setLoading={setLoading} getProducts={getProducts} />

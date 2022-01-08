@@ -34,7 +34,7 @@ const CartSidebar = (props) => {
     return (
         <Drawer anchor="right" open={props.open} onClose={props.toggleSidebar(false)}>
             <Box
-                sx={{ width: 500 }}
+                sx={{ width: 450 }}
                 role="presentation"
                 onKeyDown={props.toggleSidebar(false)}
             >
@@ -58,12 +58,12 @@ const CartSidebar = (props) => {
                                     <Grid item md={4} sm={4} xs={4}>
                                         <img className="product-detail-img" src={`http://127.0.0.1:8000${item.get_featured_image.image}`} alt={item.get_featured_image.alt_text} />
                                     </Grid>
-                                    <Grid item md={7} sm={7} xs={7}>
+                                    <Grid item md={6} sm={6} xs={6}>
                                         <Typography sx={{ mb: 1 }} component="h5" variant="subtitle2" color="textPrimary">{item.title}</Typography>
                                         <Typography sx={{ mb: 1 }} component="h6" variant="subtitle2" color="primary">${item.regular_price} x {item.qty}</Typography>
                                         <QuantitySelect product={item} qty={item.qty} qtyChange={changeItemQty} />
                                     </Grid>
-                                    <Grid item md={1} sm={1} xs={1}>
+                                    <Grid item md={2} sm={2} xs={2}>
                                         <IconButton>
                                             <ClearIcon onClick={(e) => deleteItemHandler(item.id)} />
                                         </IconButton>

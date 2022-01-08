@@ -14,6 +14,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+
+import { Link } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
 import axiosInstance from '../../helpers/axios';
@@ -34,7 +37,8 @@ const ProductsByCategory = () => {
     const [loading, setLoading] = useState(true);
 
     const [filters, setFilters] = useState({
-        rating: []
+        rating: [],
+        sort: "-created_at"
     });
 
     const getProducts = (page = 1) => {
@@ -68,6 +72,17 @@ const ProductsByCategory = () => {
         <div>
             <Navbar />
             <Box sx={{ backgroundColor: "gray.main" }}>
+                <Container maxWidth="lg" sx={{ pt: 5 }}>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link className="link" to="/">
+                            Home
+                        </Link>
+                        <Link className="link" to="/shop">
+                            Shop
+                        </Link>
+                        <Typography color="text.primary">{category}</Typography>
+                    </Breadcrumbs>
+                </Container>
                 <TopBarFilter heading={
                     (
                         <React.Fragment>
@@ -75,7 +90,7 @@ const ProductsByCategory = () => {
                             <Typography variant="subtitle2" color="textSecondary">{products.length} results found</Typography>
                         </React.Fragment>
                     )
-                } />
+                } filters={filters} setFilters={setFilters} />
                 <Container maxWidth="lg" sx={{ pb: 5 }}>
                     <Grid container spacing={2}>
                         <FilterSidebar categories={categories} filters={filters} setFilters={setFilters} setLoading={setLoading} getProducts={getProducts} />

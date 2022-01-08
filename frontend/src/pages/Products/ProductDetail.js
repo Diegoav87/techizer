@@ -9,6 +9,8 @@ import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+
 
 import Carousel from "react-material-ui-carousel";
 
@@ -22,6 +24,8 @@ import { useParams } from "react-router-dom";
 import axiosInstance from '../../helpers/axios';
 import handleError from '../../helpers/axiosErrorHandler';
 import useCart from '../../hooks/useCart';
+
+import { Link } from 'react-router-dom';
 
 import { toast } from "react-toastify";
 
@@ -76,10 +80,21 @@ const ProductDetail = () => {
         <div>
             <Navbar />
             <Box sx={{ backgroundColor: "gray.main" }}>
-                <Container sx={{ pt: 10, pb: 20 }} maxWidth="lg">
+                <Container sx={{ pt: 5, pb: 20 }} maxWidth="lg">
+                    <Box sx={{ mb: 2 }}>
+                        <Breadcrumbs aria-label="breadcrumb">
+                            <Link className="link" to="/">
+                                Home
+                            </Link>
+                            <Link className="link" to="/shop">
+                                Shop
+                            </Link>
+                            <Typography color="text.primary">{product.title}</Typography>
+                        </Breadcrumbs>
+                    </Box>
                     <Box>
                         <Grid container spacing={20}>
-                            <Grid item xs={12} sm={6} md={6}>
+                            <Grid item xs={12} sm={12} md={6}>
                                 <Carousel>
                                     {product.product_images.map((image, index) => {
                                         return (
@@ -92,17 +107,18 @@ const ProductDetail = () => {
                                     })}
                                 </Carousel>
                             </Grid>
-                            <Grid item xs={12} sm={6} md={6}>
+                            <Grid item xs={12} sm={12} md={6}>
                                 <Box>
                                     <Typography sx={{ mb: 2 }} variant="h4" fontWeight={"bold"} color="textPrimary">
                                         {product.title}
                                     </Typography>
+
+
+                                    <Typography component="h1" variant="h5" fontWeight="bold" sx={{ mb: 2 }} color="primary.main">${product.regular_price}</Typography>
                                     <Box sx={{ display: "flex" }}>
                                         <Typography>Rating</Typography>
                                         <Rating sx={{ mb: 2, ml: 1 }} name="read-only" value={product.average_rating} readOnly />
                                     </Box>
-
-                                    <Typography component="h1" variant="h5" fontWeight="bold" sx={{ mb: 2 }} color="primary.main">${product.regular_price}</Typography>
                                     <Typography sx={{ mb: 2 }}>
                                         {product.stock_count > 0 ? "In Stock" : "Out of Stock"}
                                     </Typography>

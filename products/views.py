@@ -12,6 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from .serializers import ProductListSerializer, ProductDetailSerializer, CategorySerializer, ReviewCreateSerializer, CreateProductSerializer
 from .models import Product, Category, Review, ProductImage
 from utils.pagination import CategoryPagination
+from .utils import sort_queryset
 
 # Create your views here.
 
@@ -61,6 +62,7 @@ def products(request):
     max_price = request.GET.get("max_price", "")
     query = request.GET.get("keyword", "")
     ratings = request.GET.getlist("rating[]")
+    sort = request.GET.get("sort", "")
 
     products = Product.objects.annotate(average_rating=Avg("reviews__rating")).filter(
         is_active=True, title__icontains=query).order_by("-created_at")
@@ -78,6 +80,8 @@ def products(request):
             int_ratings.append(int(rating))
 
         products = products.filter(average_rating__in=int_ratings)
+
+    products = sort_queryset(products, sort)
 
     paginator = PageNumberPagination()
     paginator.page_size = 9
