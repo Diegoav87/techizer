@@ -14,6 +14,7 @@ from pathlib import Path
 import dotenv
 import os
 from datetime import timedelta
+import dj_database_url
 
 dotenv.load_dotenv()
 
@@ -107,6 +108,9 @@ DATABASES = {
         'PORT': os.environ.get("DB_PORT")
     }
 }
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
