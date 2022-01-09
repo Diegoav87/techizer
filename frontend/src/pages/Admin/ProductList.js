@@ -26,7 +26,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import usePagination from '../../hooks/usePagination';
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 9;
 
 const style = {
     position: 'absolute',
