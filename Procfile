@@ -1,0 +1,1 @@
+web: gunicorn techizer.wsgi --log-file -

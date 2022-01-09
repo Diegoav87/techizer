@@ -59,7 +59,7 @@ const Cart = () => {
                                             <Paper elevation={3} sx={{ p: 2 }}>
                                                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                                                        <img height={150} width={150} src={`http://127.0.0.1:8000${item.get_featured_image.image}`} alt={item.get_featured_image.alt_text} />
+                                                        <img height={150} width={150} src={item.get_featured_image.image} alt={item.get_featured_image.alt_text} />
                                                         <Box sx={{ pl: 2 }}>
                                                             <Typography sx={{ mb: 1 }} component="h4" variant="subtitle1" color="textPrimary">{item.title}</Typography>
                                                             <Typography sx={{ mb: 1 }} component="h6" variant="subtitle2" color="primary">${item.regular_price} x {item.qty}</Typography>

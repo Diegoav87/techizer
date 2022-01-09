@@ -210,7 +210,7 @@ const OrderDetail = (props) => {
                                     <Divider />
                                     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 2, mb: 2 }}>
                                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                                            <img height={75} width={75} src={`http://127.0.0.1:8000${item.product.get_featured_image.image}`} alt={item.product.get_featured_image.alt_text} />
+                                            <img height={75} width={75} src={item.product.get_featured_image.image} alt={item.product.get_featured_image.alt_text} />
                                             <Box sx={{ pl: 2 }}>
                                                 <Typography sx={{ mb: 1 }} component="h6" variant="subtitle1" color="textPrimary">{item.product.title}</Typography>
 

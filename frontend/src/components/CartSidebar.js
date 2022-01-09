@@ -56,7 +56,7 @@ const CartSidebar = (props) => {
                             <Box sx={{ mb: 2, mt: 2, p: 2 }}>
                                 <Grid container alignItems="center" spacing={2}>
                                     <Grid item md={4} sm={4} xs={4}>
-                                        <img className="product-detail-img" src={`http://127.0.0.1:8000${item.get_featured_image.image}`} alt={item.get_featured_image.alt_text} />
+                                        <img className="product-detail-img" src={item.get_featured_image.image} alt={item.get_featured_image.alt_text} />
                                     </Grid>
                                     <Grid item md={6} sm={6} xs={6}>
                                         <Typography sx={{ mb: 1 }} component="h5" variant="subtitle2" color="textPrimary">{item.title}</Typography>

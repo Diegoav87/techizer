@@ -95,6 +95,8 @@ const ProductForm = (props) => {
                                 console.log(res.data);
                                 toast.success("Product created");
 
+                                let filesUploaded = 0;
+
                                 files.forEach(file => {
                                     const data = new FormData();
                                     data.append("image", file.file);
@@ -105,14 +107,20 @@ const ProductForm = (props) => {
                                         .then(res => {
                                             console.log(res.data);
                                             toast.success("Image uploaded");
+                                            filesUploaded++;
+
+                                            if (filesUploaded === files.length) {
+                                                navigate("/admin/products");
+                                            }
+
                                         })
                                         .catch(err => {
+                                            filesUploaded++;
                                             toast.error("There was an error uploading one of the images");
                                         })
 
                                 })
 
-                                navigate("/admin/products");
                             })
                             .catch(err => {
                                 handleError(err);

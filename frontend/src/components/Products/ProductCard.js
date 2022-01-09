@@ -29,7 +29,7 @@ const ProductCard = (props) => {
                         component="img"
                         alt={product.get_featured_image.alt_text}
                         height="140"
-                        image={`http://127.0.0.1:8000${product.get_featured_image.image}`}
+                        image={product.get_featured_image.image}
                     />
                 </Link>
                 <CardContent style={{ minHeight: "100%" }}>

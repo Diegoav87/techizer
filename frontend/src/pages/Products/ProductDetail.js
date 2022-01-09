@@ -100,7 +100,7 @@ const ProductDetail = () => {
                                         return (
                                             <Box key={index}>
                                                 <Paper>
-                                                    <img className="product-detail-img" alt={image.alt_text} src={`http://127.0.0.1:8000${image.image}`} />
+                                                    <img className="product-detail-img" alt={image.alt_text} src={image.image} />
                                                 </Paper>
                                             </Box>
                                         )

@@ -1,8 +1,6 @@
 import axios from "axios";
 
-// const baseURL = process.env.NODE_ENV === "production" ? "https://devcamper-django.herokuapp.com/api/v1/" : "http://127.0.0.1:8000/api/v1/";
-
-const baseURL = "http://127.0.0.1:8000/api/";
+const baseURL = "/api/";
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
@@ -57,7 +55,7 @@ axiosInstance.interceptors.response.use(
             error.response.status === 401 &&
             originalRequest.url === baseURL + "token/refresh/"
         ) {
-            window.location.href = "/login";
+            window.location.href = "/#/login";
             return Promise.reject(error);
         }
 
@@ -98,11 +96,11 @@ axiosInstance.interceptors.response.use(
                         });
                 } else {
                     console.log("Refresh token is expired", tokenParts.exp, now);
-                    window.location.href = "/login";
+                    window.location.href = "/#/login";
                 }
             } else {
                 console.log("Refresh token not available.");
-                window.location.href = "/login";
+                window.location.href = "/#/login";
             }
         }
 
