@@ -12,8 +12,6 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 import { Link } from 'react-router-dom';
@@ -87,7 +85,7 @@ const ProductsByCategory = () => {
                     (
                         <React.Fragment>
                             <Typography component="h5" variant="subtitle1" color="textPrimary" fontWeight="bold">{category}</Typography>
-                            <Typography variant="subtitle2" color="textSecondary">{products.length} results found</Typography>
+                            <Typography variant="subtitle2" color="textSecondary">{productCount} results found</Typography>
                         </React.Fragment>
                     )
                 } filters={filters} setFilters={setFilters} />
@@ -97,14 +95,22 @@ const ProductsByCategory = () => {
                         <Grid item xs={12} sm={8} md={9}>
                             {loading ? (<Spinner />) : (
                                 <Box>
-                                    <ProductGrid products={products} breakpoints={{ xs: 12, sm: 12, md: 4 }} />
-                                    <Box sx={{ mt: 4 }}>
-                                        <Paginator
-                                            pageCount={pageCount}
-                                            onPageChange={onPageChange}
-                                            currentPage={currentPage}
-                                        />
-                                    </Box>
+                                    {products.length > 0 ? (
+                                        <React.Fragment>
+                                            <ProductGrid products={products} breakpoints={{ xs: 12, sm: 12, md: 4 }} />
+                                            <Box sx={{ mt: 4 }}>
+                                                <Paginator
+                                                    pageCount={pageCount}
+                                                    onPageChange={onPageChange}
+                                                    currentPage={currentPage}
+                                                />
+                                            </Box>
+                                        </React.Fragment>
+                                    ) : (
+                                        <Paper sx={{ p: 3 }}>
+                                            <Typography color="textPrimary">No results found</Typography>
+                                        </Paper>
+                                    )}
                                 </Box>
                             )}
                         </Grid>

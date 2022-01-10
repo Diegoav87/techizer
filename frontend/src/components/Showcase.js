@@ -7,6 +7,8 @@ import Grid from '@mui/material/Grid';
 
 import showcaseImg from '../assets/img/showcase.jpg';
 
+import { Link } from 'react-router-dom';
+
 const Showcase = () => {
     return (
         <div style={{ backgroundImage: `url(${showcaseImg})`, backgroundSize: "cover", minHeight: "500px", minWidth: "100%" }}>
@@ -19,7 +21,9 @@ const Showcase = () => {
                         <Typography sx={{ mt: 2, maxWidth: "80%" }} variant="subtitle1" color="textPrimary">
                             From video games to PC parts, anything you need you will find it here at Techizer.
                         </Typography>
-                        <Button size="large" sx={{ mt: 2 }} variant="contained">Shop Now</Button>
+                        <Link to="/shop" className="link">
+                            <Button size="large" sx={{ mt: 2 }} variant="contained">Shop Now</Button>
+                        </Link>
                     </Grid>
                     <Grid item xs={12} sm={4} md={4}></Grid>
                 </Grid>

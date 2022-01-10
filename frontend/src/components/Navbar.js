@@ -210,7 +210,7 @@ const Navbar = () => {
                         component="div"
                         sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}
                     >
-                        LOGO
+                        TECHIZER
                     </Typography>
                     <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 2 }}>
                         {auth.user ? authPages.map((page) => (

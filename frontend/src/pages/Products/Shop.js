@@ -9,6 +9,7 @@ import TopBarFilter from '../../components/Products/TopBarFilter';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 
@@ -86,7 +87,7 @@ const Shop = () => {
                     (
                         <React.Fragment>
                             <Typography component="h5" variant="subtitle1" color="textPrimary" fontWeight="bold">{keyword === "" ? "All Products" : `Showing results for "${keyword}"`}</Typography>
-                            <Typography variant="subtitle2" color="textSecondary">{products.length} results found</Typography>
+                            <Typography variant="subtitle2" color="textSecondary">{productCount} results found</Typography>
                         </React.Fragment>
                     )
                 } filters={filters} setFilters={setFilters} />
@@ -96,14 +97,23 @@ const Shop = () => {
                         <Grid item xs={12} sm={8} md={9}>
                             {loading ? (<Spinner />) : (
                                 <Box>
-                                    <ProductGrid products={products} breakpoints={{ xs: 12, sm: 12, md: 4 }} />
-                                    <Box sx={{ mt: 4 }}>
-                                        <Paginator
-                                            pageCount={pageCount}
-                                            onPageChange={onPageChange}
-                                            currentPage={currentPage}
-                                        />
-                                    </Box>
+                                    {products.length > 0 ? (
+                                        <React.Fragment>
+                                            <ProductGrid products={products} breakpoints={{ xs: 12, sm: 12, md: 4 }} />
+                                            <Box sx={{ mt: 4 }}>
+                                                <Paginator
+                                                    pageCount={pageCount}
+                                                    onPageChange={onPageChange}
+                                                    currentPage={currentPage}
+                                                />
+                                            </Box>
+                                        </React.Fragment>
+                                    ) : (
+                                        <Paper sx={{ p: 3 }}>
+                                            <Typography color="textPrimary">No results found</Typography>
+                                        </Paper>
+                                    )}
+
                                 </Box>
                             )}
 

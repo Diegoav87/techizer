@@ -35,6 +35,7 @@ def register(request):
             'domain': settings.DOMAIN,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
+            'request': request
         })
         user.email_user(subject=subject, message=message)
         return Response(status=status.HTTP_201_CREATED)
@@ -53,6 +54,7 @@ def account_activate(request):
 
 @api_view(['POST'])
 def request_password_reset(request):
+    print(request.scheme)
     email = request.data.get("email", "")
 
     if CustomUser.objects.filter(email=email).exists():
@@ -64,6 +66,7 @@ def request_password_reset(request):
             'domain': settings.DOMAIN,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
             'token': account_activation_token.make_token(user),
+            'request': request
         })
         user.email_user(subject=subject, message=message)
         return Response(status=status.HTTP_200_OK)
